@@ -56,6 +56,8 @@ def _testPrintPointPen():
     pen.endPath()
     >>> pen.addComponent("a", (1, 0, 0, 1, 10, 10), "xyz987")
     pen.addComponent('a', (1, 0, 0, 1, 10, 10), 'xyz987')
+    >>> pen.addComponent("a", (1, 0, 0, 1, 10, 10))
+    pen.addComponent('a', (1, 0, 0, 1, 10, 10), None)
     """
 
 
