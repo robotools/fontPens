@@ -40,7 +40,10 @@ class PrintPointPen(AbstractPointPen):
 
     def addComponent(self, baseGlyphName, transformation, identifier=None):
         assert not self.havePath
-        print("pen.addComponent(%r, %s, %r)" % (baseGlyphName, tuple(transformation), identifier))
+        args = "%r, %r" % (baseGlyphName, transformation)
+        if identifier is not None:
+            args += ", identifier=%r" % identifier
+        print("pen.addComponent(%s)" % args)
 
 
 def _testPrintPointPen():
@@ -55,9 +58,9 @@ def _testPrintPointPen():
     >>> pen.endPath()
     pen.endPath()
     >>> pen.addComponent("a", (1, 0, 0, 1, 10, 10), "xyz987")
-    pen.addComponent('a', (1, 0, 0, 1, 10, 10), 'xyz987')
+    pen.addComponent('a', (1, 0, 0, 1, 10, 10), identifier='xyz987')
     >>> pen.addComponent("a", (1, 0, 0, 1, 10, 10))
-    pen.addComponent('a', (1, 0, 0, 1, 10, 10), None)
+    pen.addComponent('a', (1, 0, 0, 1, 10, 10))
     """
 
 
