@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 from fontTools.misc.py23 import *
 from ufoLib.pointPen import AbstractPointPen
 
@@ -19,7 +21,7 @@ class PrintPointPen(AbstractPointPen):
 
     def endPath(self):
         self.havePath = False
-        print "pen.endPath()"
+        print("pen.endPath()")
 
     def addPoint(self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         assert self.havePath
