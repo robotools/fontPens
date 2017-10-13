@@ -1,1 +1,7 @@
-*.pyc
+# Byte-compiled / optimized files
+__pycache__/
+*.py[co]
+*$py.class
+
+# OSX Finder
+.DS_Store
