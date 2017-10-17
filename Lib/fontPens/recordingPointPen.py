@@ -4,35 +4,35 @@ from ufoLib.pointPen import AbstractPointPen
 
 
 def replayRecording(recording, pen):
-	"""Replay a recording, as produced by RecordingPointPen, to a pointpen.
+    """Replay a recording, as produced by RecordingPointPen, to a pointpen.
 
-	Note that recording does not have to be produced by those pens.
-	It can be any iterable of tuples of method name and tuple-of-arguments.
-	Likewise, pen can be any objects receiving those method calls.
-	"""
-	for operator, operands, kwargs in recording:
-		getattr(pen, operator)(*operands, **kwargs)
+    Note that recording does not have to be produced by those pens.
+    It can be any iterable of tuples of method name and tuple-of-arguments.
+    Likewise, pen can be any objects receiving those method calls.
+    """
+    for operator, operands, kwargs in recording:
+        getattr(pen, operator)(*operands, **kwargs)
 
 
 class RecordingPointPen(AbstractPointPen):
 
-	def __init__(self):
-		self.value = []
-        
-	def beginPath(self, **kwargs):
-		self.value.append(("beginPath", (), kwargs))
+    def __init__(self):
+        self.value = []
 
-	def endPath(self):
-		self.value.append(("endPath", (), {}))
+    def beginPath(self, **kwargs):
+        self.value.append(("beginPath", (), kwargs))
 
-	def addPoint(self, pt, segmentType=None, smooth=False, name=None, **kwargs):
- 		self.value.append(("addPoint", (pt, segmentType, smooth, name), kwargs))
+    def endPath(self):
+        self.value.append(("endPath", (), {}))
 
-	def addComponent(self, baseGlyphName, transformation, **kwargs):
- 		self.value.append(("addComponent", (baseGlyphName, transformation), kwargs))
+    def addPoint(self, pt, segmentType=None, smooth=False, name=None, **kwargs):
+        self.value.append(("addPoint", (pt, segmentType, smooth, name), kwargs))
 
-	def replay(self, pen):
-		replayRecording(self.value, pen)
+    def addComponent(self, baseGlyphName, transformation, **kwargs):
+        self.value.append(("addComponent", (baseGlyphName, transformation), kwargs))
+
+    def replay(self, pen):
+        replayRecording(self.value, pen)
 
 
 def _test():
