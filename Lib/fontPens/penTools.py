@@ -160,7 +160,7 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     return length
 
 
-def getQuadraticCurveLength(pt0, pt1, pt2):
+def getQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     """
     Calculate the length of a quadratic curve.
     Source: http://www.malczak.linuxpl.com/blog/quadratic-bezier-curve-length/
@@ -169,10 +169,12 @@ def getQuadraticCurveLength(pt0, pt1, pt2):
     0.0
     >>> getQuadraticCurveLength((0, 0), (50, 0), (80, 0)) # collinear points
     80.0
+    >>> getQuadraticCurveLength((0, 0), (0, 50), (0, 80)) # collinear points vertical
+    80.0
     >>> getQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
     107.70329614269008
     >>> getQuadraticCurveLength((0, 0), (40, 0), (-40, 0)) # collinear points, control point outside
-    66.39999999999999
+    66.6666666666667
     >>> getQuadraticCurveLength((0, 0), (40, 0), (0, 0)) # collinear points, looping back
     40.0
     >>> getQuadraticCurveLength((0, 0), (0, 100), (100, 0))
@@ -182,10 +184,11 @@ def getQuadraticCurveLength(pt0, pt1, pt2):
     >>> getQuadraticCurveLength((0, 0), (50, -10), (80, 50))
     102.53273816445825
     """
-    #if pt0 == pt1 or pt1 == pt2:
-    #    if pt0 == pt2:
-    #        return 0.0
-    #    return distance(pt0, pt2)
+    if pt0 == pt1 or pt1 == pt2:
+        if pt0 == pt2:
+            return 0.0
+        return distance(pt0, pt2)
+    
     ax = pt0[0] - 2 * pt1[0] + pt2[0]
     ay = pt0[1] - 2 * pt1[1] + pt2[1]
     bx = 2 * pt1[0] - 2 * pt0[0]
@@ -194,7 +197,7 @@ def getQuadraticCurveLength(pt0, pt1, pt2):
     A = 4 * (ax * ax + ay * ay)
     B = 4 * (ax * bx + ay * by)
     C = bx * bx + by * by
-    #print A, B, C
+    
     if A == 0:
         if B == 0:
             if C == 0:
@@ -204,21 +207,15 @@ def getQuadraticCurveLength(pt0, pt1, pt2):
                 # Line
                 length = distance(pt0, pt2)
         else:
-            if C == 0:
-                Sabc = 2 * math.sqrt(B)
-                BA = B / 0
+            # Can this happen? The tests don't trigger it
+            return estimateQuadraticCurveLength(pt0, pt1, pt2, precision)
+            Sabc = 2 * math.sqrt(B + C)
+            C_2 = 2 * math.sqrt(C)
+            BA = B / 0
 
-                length = (
-                        - B * B * math.log((BA + Sabc) / BA) 
-                    ) / 0
-            else:
-                Sabc = 2 * math.sqrt(B + C)
-                C_2 = 2 * math.sqrt(C)
-                BA = B / 0
-
-                length = (
-                        (- B * B) * math.log((BA + Sabc) / (BA + C_2)) 
-                    ) / 0
+            length = (
+                (- B * B) * math.log((BA + Sabc) / (BA + C_2)) 
+            ) / 0
     else:
         if B == 0:
             Sabc = 2 * math.sqrt(A + C)
@@ -226,30 +223,22 @@ def getQuadraticCurveLength(pt0, pt1, pt2):
 
             length = A_32 * Sabc / (4 * A_32)
         else:
-            if C == 0:
-                Sabc = 2 * math.sqrt(A + B)
-                A_2 = math.sqrt(A)
-                A_32 = 2 * A * A_2
-                BA = B / A_2
+            Sabc = 2 * math.sqrt(A + B + C)
+            A_2 = math.sqrt(A)
+            A_32 = 2 * A * A_2
+            C_2 = 2 * math.sqrt(C)
+            BA = B / A_2
 
-                length = (
-                        A_32 * Sabc + 
-                        A_2 * B * Sabc + 
-                        (- B * B) * math.log((2 * A_2 + BA + Sabc) / BA) 
-                    ) / (4 * A_32)
-
+            if BA + C_2 == 0:
+                # The points are collinear, but may be in usual order
+                # Fall back to estimated curve length
+                return estimateQuadraticCurveLength(pt0, pt1, pt2, precision)
             else:
-                Sabc = 2 * math.sqrt(A + B + C)
-                A_2 = math.sqrt(A)
-                A_32 = 2 * A * A_2
-                C_2 = 2 * math.sqrt(C)
-                BA = B / A_2
-
                 length = (
-                        A_32 * Sabc + 
-                        A_2 * B * (Sabc - C_2) + 
-                        (4 * C * A - B * B) * math.log((2 * A_2 + BA + Sabc) / (BA + C_2)) 
-                    ) / (4 * A_32)
+                    A_32 * Sabc + 
+                    A_2 * B * (Sabc - C_2) + 
+                    (4 * C * A - B * B) * math.log((2 * A_2 + BA + Sabc) / (BA + C_2)) 
+                ) / (4 * A_32)
     return length
 
 
