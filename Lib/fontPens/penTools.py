@@ -1,3 +1,4 @@
+from __future__ import division
 import math
 
 from fontTools.misc.py23 import *
@@ -87,21 +88,31 @@ def estimateCubicCurveLength(pt0, pt1, pt2, pt3, precision=10):
     return length
 
 
-def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
+def estimateQuadraticCurveLength(pt0, pt1, pt2):
     """
-    Estimate the length of this curve by iterating
-    through it and averaging the length of the flat bits.
+    Calculate the length of a quadratic curve.
+    Source: http://www.malczak.linuxpl.com/blog/quadratic-bezier-curve-length/
     """
-    points = []
-    length = 0
-    step = 1.0 / precision
-    factors = range(0, precision + 1)
-    for i in factors:
-        points.append(getQuadraticPoint(i * step, pt0, pt1, pt2))
-    for i in range(len(points) - 1):
-        pta = points[i]
-        ptb = points[i + 1]
-        length += distance(pta, ptb)
+    ax = pt0[0] - 2 * pt1[0] + pt2[0]
+    ay = pt0[1] - 2 * pt1[1] + pt2[1]
+    bx = 2 * pt1[0] - 2 * pt0[0]
+    by = 2 * pt1[1] - 2 * pt0[1]
+    
+    A = 4 * (ax * ax + ay * ay)
+    B = 4 * (ax * bx + ay * by)
+    C = bx * bx + by * by
+
+    Sabc = 2 * math.sqrt(A + B + C)
+    A_2 = math.sqrt(A)
+    A_32 = 2 * A * A_2
+    C_2 = 2 * math.sqrt(C)
+    BA = B / A_2
+
+    length = (
+            A_32 * Sabc + 
+            A_2 * B * (Sabc-C_2) + 
+            (4 * C * A - B * B) * math.log((2 * A_2 + BA + Sabc) / (BA + C_2)) 
+        ) / (4*A_32)
     return length
 
 
