@@ -31,6 +31,20 @@ def middlePoint(pt1, pt2):
 
 
 def getCubicPoint(t, pt0, pt1, pt2, pt3):
+    """
+    Return the point for t on the cubic curve defined by pt0, pt1, pt2, pt3.
+
+    >>> getCubicPoint(0.00, (0, 0), (50, -10), (80, 50), (120, 40))
+    (0, 0)
+    >>> getCubicPoint(0.20, (0, 0), (50, -10), (80, 50), (120, 40))
+    (27.84, 1.280000000000002)
+    >>> getCubicPoint(0.50, (0, 0), (50, -10), (80, 50), (120, 40))
+    (63.75, 20.0)
+    >>> getCubicPoint(0.85, (0, 0), (50, -10), (80, 50), (120, 40))
+    (102.57375, 40.2475)
+    >>> getCubicPoint(1.00, (0, 0), (50, -10), (80, 50), (120, 40))
+    (120, 40)
+    """
     if t == 0:
         return pt0
     if t == 1:
@@ -57,6 +71,20 @@ def getCubicPoint(t, pt0, pt1, pt2, pt3):
 
 
 def getQuadraticPoint(t, pt0, pt1, pt2):
+    """
+    Return the point for t on the quadratic curve defined by pt0, pt1, pt2, pt3.
+
+    >>> getQuadraticPoint(0.00, (0, 0), (50, -10), (80, 50))
+    (0, 0)
+    >>> getQuadraticPoint(0.21, (0, 0), (50, -10), (80, 50))
+    (20.118, -1.113)
+    >>> getQuadraticPoint(0.50, (0, 0), (50, -10), (80, 50))
+    (45.0, 7.5)
+    >>> getQuadraticPoint(0.87, (0, 0), (50, -10), (80, 50))
+    (71.862, 35.583)
+    >>> getQuadraticPoint(1.00, (0, 0), (50, -10), (80, 50))
+    (80, 50)
+    """
     if t == 0:
         return pt0
     if t == 1:
@@ -74,6 +102,17 @@ def estimateCubicCurveLength(pt0, pt1, pt2, pt3, precision=10):
     """
     Estimate the length of this curve by iterating
     through it and averaging the length of the flat bits.
+
+    >>> estimateCubicCurveLength((0, 0), (0, 0), (0, 0), (0, 0), 10)
+    0.0
+    >>> estimateCubicCurveLength((0, 0), (0, 0), (120, 0), (120, 0), 10)
+    120.0
+    >>> estimateCubicCurveLength((0, 0), (50, 0), (80, 0), (120, 0), 10)
+    120.0
+    >>> estimateCubicCurveLength((0, 0), (50, -10), (80, 50), (120, 40), 1)
+    126.49110640673517
+    >>> estimateCubicCurveLength((0, 0), (50, -10), (80, 50), (120, 40), 10)
+    130.26123149406607
     """
     points = []
     length = 0
