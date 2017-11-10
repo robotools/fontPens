@@ -98,11 +98,11 @@ def getQuadraticPoint(t, pt0, pt1, pt2):
     return x, y
 
 
-def getCubicPointPath(increments, pt0, pt1, pt2, pt3):
+def getCubicPoints(ts, pt0, pt1, pt2, pt3):
     """
     Return a list of points for increments of t on the cubic curve defined by pt0, pt1, pt2, pt3.
 
-    >>> getCubicPointPath([i/10 for i in range(11)], (0, 0), (50, -10), (80, 50), (120, 40))
+    >>> getCubicPoints([i/10 for i in range(11)], (0, 0), (50, -10), (80, 50), (120, 40))
     [(0.0, 0.0), (14.43, -1.0399999999999996), (27.84, 1.280000000000002), (40.41, 6.119999999999999), (52.32, 12.640000000000008), (63.75, 20.0), (74.88, 27.36), (85.89, 33.88), (96.96, 38.72000000000001), (108.27000000000001, 41.040000000000006), (120.0, 40.0)]
     """
     x0, y0 = pt0
@@ -114,7 +114,7 @@ def getCubicPointPath(increments, pt0, pt1, pt2, pt3):
     ax = pt3[0] - x0 - cx - bx
     ay = pt3[1] - y0 - cy - by
     path = []
-    for t in increments:
+    for t in ts:
         t3 = t ** 3
         t2 = t * t
         x = ax * t3 + bx * t2 + cx * t + x0
@@ -142,7 +142,7 @@ def estimateCubicCurveLength(pt0, pt1, pt2, pt3, precision=10):
     
     length = 0
     step = 1.0 / precision
-    points = getCubicPointPath([f * step for f in range(precision + 1)], pt0, pt1, pt2, pt3)
+    points = getCubicPoints([f * step for f in range(precision + 1)], pt0, pt1, pt2, pt3)
     for i in range(len(points) - 1):
         pta = points[i]
         ptb = points[i + 1]
