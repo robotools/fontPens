@@ -183,32 +183,6 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     return length
 
 
-def getQuadraticCurveLength(pt0, pt1, pt2, approximate_fallback=False):
-    """
-    Calculate the length of a quadratic curve.
-
-    >>> getQuadraticCurveLength((0, 0), (0, 0), (0, 0)) # empty segment
-    0.0
-    >>> getQuadraticCurveLength((0, 0), (50, 0), (80, 0)) # collinear points
-    80.0
-    >>> getQuadraticCurveLength((0, 0), (0, 50), (0, 80)) # collinear points vertical
-    80.0
-    >>> getQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
-    107.70329614269008
-    >>> getQuadraticCurveLength((0, 0), (0, 100), (100, 0))
-    154.02976155645263
-    >>> getQuadraticCurveLength((0, 0), (0, 50), (100, 0))
-    120.21581243984076
-    >>> getQuadraticCurveLength((0, 0), (50, -10), (80, 50))
-    102.53273816445825
-    >>> getQuadraticCurveLength((0, 0), (40, 0), (-40, 0), True) # collinear points, control point outside, exact result should be 66.6666666666667
-    69.41755572720999
-    >>> getQuadraticCurveLength((0, 0), (40, 0), (0, 0), True) # collinear points, looping back, exact result should be 40.0
-    34.4265186329548
-    """
-    return calcQuadraticArcLengthC(complex(*pt0), complex(*pt1), complex(*pt2), approximate_fallback)
-
-
 def interpolatePoint(pt1, pt2, v):
     """
     interpolate point by factor v
