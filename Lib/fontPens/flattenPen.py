@@ -1,6 +1,6 @@
 from fontTools.pens.basePen import BasePen
 
-from penTools import estimateCubicCurveLength, distance, interpolatePoint, getCubicPoint
+from penTools import estimateCubicCurveLength, estimateQuadraticCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
 
 
 class FlattenPen(BasePen):
@@ -42,25 +42,43 @@ class FlattenPen(BasePen):
             self.currentPt = pt
             return
         step = 1.0 / maxSteps
-        factors = range(0, maxSteps + 1)
-        for i in factors[1:]:
-            self.otherPen.lineTo(interpolatePoint(self.currentPt, pt, i * step))
+        for factor in range(1, maxSteps + 1):
+            self.otherPen.lineTo(interpolatePoint(self.currentPt, pt, factor * step))
         self.currentPt = pt
 
     def _curveToOne(self, pt1, pt2, pt3):
+        falseCurve = (pt1 == self.currentPt) and (pt2 == pt3)
+        if falseCurve:
+            self._lineTo(pt3)
+            return
         est = estimateCubicCurveLength(self.currentPt, pt1, pt2, pt3) / self.approximateSegmentLength
         maxSteps = int(round(est))
-        falseCurve = (pt1 == self.currentPt) and (pt2 == pt3)
-        if maxSteps < 1 or falseCurve:
+        if maxSteps < 1:
             self.otherPen.lineTo(pt3)
             self.currentPt = pt3
             return
         step = 1.0 / maxSteps
-        factors = range(0, maxSteps + 1)
-        for i in factors[1:]:
-            pt = getCubicPoint(i * step, self.currentPt, pt1, pt2, pt3)
+        for factor in range(1, maxSteps + 1):
+            pt = getCubicPoint(factor * step, self.currentPt, pt1, pt2, pt3)
             self.otherPen.lineTo(pt)
         self.currentPt = pt3
+
+    def _qCurveToOne(self, pt1, pt2):
+        falseCurve = (pt1 == self.currentPt) or (pt1 == pt2)
+        if falseCurve:
+            self._lineTo(pt2)
+            return
+        est = estimateQuadraticCurveLength(self.currentPt, pt1, pt2) / self.approximateSegmentLength
+        maxSteps = int(round(est))
+        if maxSteps < 1:
+            self.otherPen.lineTo(pt2)
+            self.currentPt = pt2
+            return
+        step = 1.0 / maxSteps
+        for factor in range(1, maxSteps + 1):
+            pt = getQuadraticPoint(factor * step, self.currentPt, pt1, pt2)
+            self.otherPen.lineTo(pt)
+        self.currentPt = pt2
 
     def _closePath(self):
         self.lineTo(self.firstPt)
