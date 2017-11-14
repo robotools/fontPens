@@ -2,6 +2,7 @@ from __future__ import division
 import math
 
 from fontTools.misc.py23 import *
+from fontTools.misc.bezierTools import calcQuadraticArcLengthC
 
 
 def distance(pt1, pt2):
@@ -105,8 +106,7 @@ def getCubicPoints(ts, pt0, pt1, pt2, pt3):
     >>> getCubicPoints([i/10 for i in range(11)], (0, 0), (50, -10), (80, 50), (120, 40))
     [(0.0, 0.0), (14.43, -1.0399999999999996), (27.84, 1.280000000000002), (40.41, 6.119999999999999), (52.32, 12.640000000000008), (63.75, 20.0), (74.88, 27.36), (85.89, 33.88), (96.96, 38.72000000000001), (108.27000000000001, 41.040000000000006), (120.0, 40.0)]
     """
-    x0, y0 = pt0
-    x1, y1 = pt1
+    (x0, y0), (x1, y1) = pt0, pt1
     cx = (x1 - x0) * 3
     cy = (y1 - y0) * 3
     bx = (pt2[0] - x1) * 3 - cx
@@ -161,14 +161,14 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     80.0
     >>> estimateQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
     107.70329614269008
-    >>> estimateQuadraticCurveLength((0, 0), (40, 0), (-40, 0)) # collinear points, control point outside
-    66.39999999999999
-    >>> estimateQuadraticCurveLength((0, 0), (40, 0), (0, 0)) # collinear points, looping back
-    40.0
     >>> estimateQuadraticCurveLength((0, 0), (0, 100), (100, 0))
     153.6861437729263
     >>> estimateQuadraticCurveLength((0, 0), (50, -10), (80, 50))
     102.4601733446439
+    >>> estimateQuadraticCurveLength((0, 0), (40, 0), (-40, 0)) # collinear points, control point outside
+    66.39999999999999
+    >>> estimateQuadraticCurveLength((0, 0), (40, 0), (0, 0)) # collinear points, looping back
+    40.0
     """
     points = []
     length = 0
@@ -183,10 +183,9 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     return length
 
 
-def getQuadraticCurveLength(pt0, pt1, pt2, precision=10):
+def getQuadraticCurveLength(pt0, pt1, pt2, approximate_fallback=False):
     """
     Calculate the length of a quadratic curve.
-    Source: http://www.malczak.linuxpl.com/blog/quadratic-bezier-curve-length/
 
     >>> getQuadraticCurveLength((0, 0), (0, 0), (0, 0)) # empty segment
     0.0
@@ -196,73 +195,18 @@ def getQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     80.0
     >>> getQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
     107.70329614269008
-    >>> getQuadraticCurveLength((0, 0), (40, 0), (-40, 0)) # collinear points, control point outside
-    66.6666666666667
-    >>> getQuadraticCurveLength((0, 0), (40, 0), (0, 0)) # collinear points, looping back
-    40.0
     >>> getQuadraticCurveLength((0, 0), (0, 100), (100, 0))
     154.02976155645263
     >>> getQuadraticCurveLength((0, 0), (0, 50), (100, 0))
     120.21581243984076
     >>> getQuadraticCurveLength((0, 0), (50, -10), (80, 50))
     102.53273816445825
+    >>> getQuadraticCurveLength((0, 0), (40, 0), (-40, 0), True) # collinear points, control point outside, exact result should be 66.6666666666667
+    69.41755572720999
+    >>> getQuadraticCurveLength((0, 0), (40, 0), (0, 0), True) # collinear points, looping back, exact result should be 40.0
+    34.4265186329548
     """
-    if pt0 == pt1 or pt1 == pt2:
-        if pt0 == pt2:
-            return 0.0
-        return distance(pt0, pt2)
-    
-    ax = pt0[0] - 2 * pt1[0] + pt2[0]
-    ay = pt0[1] - 2 * pt1[1] + pt2[1]
-    bx = 2 * pt1[0] - 2 * pt0[0]
-    by = 2 * pt1[1] - 2 * pt0[1]
-    
-    A = 4 * (ax * ax + ay * ay)
-    B = 4 * (ax * bx + ay * by)
-    C = bx * bx + by * by
-    
-    if A == 0:
-        if B == 0:
-            if C == 0:
-                # Empty curve
-                length = 0.0
-            else:
-                # Line
-                length = distance(pt0, pt2)
-        else:
-            # Can this happen? The tests don't trigger it
-            return estimateQuadraticCurveLength(pt0, pt1, pt2, precision)
-            Sabc = 2 * math.sqrt(B + C)
-            C_2 = 2 * math.sqrt(C)
-            BA = B / 0
-
-            length = (
-                (- B * B) * math.log((BA + Sabc) / (BA + C_2)) 
-            ) / 0
-    else:
-        if B == 0:
-            Sabc = 2 * math.sqrt(A + C)
-            A_32 = 2 * A * math.sqrt(A)
-
-            length = A_32 * Sabc / (4 * A_32)
-        else:
-            Sabc = 2 * math.sqrt(A + B + C)
-            A_2 = math.sqrt(A)
-            A_32 = 2 * A * A_2
-            C_2 = 2 * math.sqrt(C)
-            BA = B / A_2
-
-            if BA + C_2 == 0:
-                # The points are collinear, but may be in usual order
-                # Fall back to estimated curve length
-                return estimateQuadraticCurveLength(pt0, pt1, pt2, precision)
-            else:
-                length = (
-                    A_32 * Sabc + 
-                    A_2 * B * (Sabc - C_2) + 
-                    (4 * C * A - B * B) * math.log((2 * A_2 + BA + Sabc) / (BA + C_2)) 
-                ) / (4 * A_32)
-    return length
+    return calcQuadraticArcLengthC(complex(*pt0), complex(*pt1), complex(*pt2), approximate_fallback)
 
 
 def interpolatePoint(pt1, pt2, v):
