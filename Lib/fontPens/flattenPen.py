@@ -1,6 +1,6 @@
 from fontTools.pens.basePen import BasePen
 
-from penTools import estimateCubicCurveLength, estimateQuadraticCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
+from penTools import estimateCubicCurveLength, getQuadraticCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
 
 
 class FlattenPen(BasePen):
@@ -68,7 +68,7 @@ class FlattenPen(BasePen):
         if falseCurve:
             self._lineTo(pt2)
             return
-        est = estimateQuadraticCurveLength(self.currentPt, pt1, pt2) / self.approximateSegmentLength
+        est = getQuadraticCurveLength(self.currentPt, pt1, pt2, approximate_fallback=True) / self.approximateSegmentLength
         maxSteps = int(round(est))
         if maxSteps < 1:
             self.otherPen.lineTo(pt2)
