@@ -48,9 +48,8 @@ class DigestPointPen(AbstractPointPen):
           but not interpolatability.
         """
         points = []
-        from types import TupleType
         for item in self._data:
-            if type(item) == TupleType:
+            if isinstance(item, tuple) and isinstance(item[0], tuple):
                 points.append(item[0])
         if needSort:
             points.sort()
@@ -80,9 +79,13 @@ def _testDigestPointPen():
     >>> pen.getDigest()
     (('beginPath', 'abc123'),)
 
-    >>> pen.addPoint((10, 10), "move", "True")
+    >>> pen.addPoint((10, 10), "move", True)
+    >>> pen.addPoint((-10, 100), "line", False)
+    >>> pen.endPath()
     >>> pen.getDigest()
-    (('beginPath', 'abc123'), ((10, 10), 'move', 'True', None))
+    (('beginPath', 'abc123'), ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath')
+    >>> pen.getDigestPointsOnly()  # https://github.com/robofab-developers/fontPens/issues/8
+    ((-10, 100), (10, 10))
     """
 
 
