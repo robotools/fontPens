@@ -49,7 +49,7 @@ class ThresholdPen(AbstractPen):
 
 def thresholdGlyph(aGlyph, threshold=10):
     """
-    Convenience function that applies the **ThresholdPen** to a glyph. Returns a new glyph object (from objectsRF.RGlyph).
+    Convenience function that applies the **ThresholdPen** to a glyph in place.
     """
     from fontTools.pens.recordingPen import RecordingPen
     recorder = RecordingPen()

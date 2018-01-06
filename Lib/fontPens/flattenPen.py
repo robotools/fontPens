@@ -98,7 +98,7 @@ class FlattenPen(BasePen):
 
 def flattenGlyph(aGlyph, threshold=10, segmentLines=True):
     """
-    Convenience function that applies the **FlattenPen** pen to a glyph. Returns a new glyph object.
+    Convenience function that applies the **FlattenPen** pen to a glyph in place.
     """
     if len(aGlyph) == 0:
         return aGlyph
@@ -153,7 +153,8 @@ def _testFlattenGlyph():
     """
     >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
-    >>> glyph = flattenGlyph(glyph)
+    >>> flattenGlyph(glyph) #doctest: +ELLIPSIS
+    <RGlyph...
     >>> glyph.draw(PrintPen())
     pen.moveTo((10.0, 10.0))
     pen.lineTo((10.0, 20.0))
