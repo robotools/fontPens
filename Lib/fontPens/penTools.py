@@ -160,7 +160,7 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     >>> estimateQuadraticCurveLength((0, 0), (50, 0), (80, 0)) # collinear points
     80.0
     >>> estimateQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
-    107.70329614269008
+    107.70329614269009
     >>> estimateQuadraticCurveLength((0, 0), (0, 100), (100, 0))
     153.6861437729263
     >>> estimateQuadraticCurveLength((0, 0), (50, -10), (80, 50))
