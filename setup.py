@@ -162,7 +162,7 @@ setup_params = dict(
         'pytest',
     ],
     install_requires=[
-        "fonttools>=3.1.2",
+        "fonttools>=3.20.0",
         "ufoLib>=2.0",
     ],
     cmdclass={
