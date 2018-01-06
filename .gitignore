@@ -3,5 +3,8 @@ __pycache__/
 *.py[co]
 *$py.class
 
+.cache
+.eggs
+
 # OSX Finder
 .DS_Store

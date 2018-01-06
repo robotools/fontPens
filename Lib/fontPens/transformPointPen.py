@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function, division
+
 from ufoLib.pointPen import AbstractPointPen
 
 
@@ -33,13 +35,13 @@ class TransformPointPen(AbstractPointPen):
 
 def _testTransformPointPen():
     """
-    >>> from printPointPen import PrintPointPen
+    >>> from fontPens.printPointPen import PrintPointPen
 
     >>> pen = TransformPointPen(PrintPointPen(), (1, 0, 0, 1, 20, 20))
     >>> pen.beginPath()
     pen.beginPath()
-    >>> pen.addPoint((0, 0), True, name="hello")
-    pen.addPoint((20, 20), segmentType=True, name='hello')
+    >>> pen.addPoint((0, 0), "move", name="hello")
+    pen.addPoint((20, 20), segmentType='move', name='hello')
     >>> pen.endPath()
     pen.endPath()
     """

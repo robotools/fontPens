@@ -1,7 +1,9 @@
+from __future__ import absolute_import, print_function, division
+
 from fontTools.misc.bezierTools import calcQuadraticArcLength
 from fontTools.pens.basePen import BasePen
 
-from penTools import estimateCubicCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
+from fontPens.penTools import estimateCubicCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
 
 
 class FlattenPen(BasePen):
@@ -131,7 +133,7 @@ def _makeTestGlyph():
 
 def _testFlattenPen():
     """
-    >>> from printPen import PrintPen
+    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> pen = FlattenPen(PrintPen(), approximateSegmentLength=10, segmentLines=True)
     >>> glyph.draw(pen)
@@ -150,7 +152,7 @@ def _testFlattenPen():
 
 def _testFlattenGlyph():
     """
-    >>> from printPen import PrintPen
+    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> glyph = flattenGlyph(glyph)
     >>> glyph.draw(PrintPen())

@@ -1,8 +1,8 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function, division
 
 from ufoLib.pointPen import AbstractPointPen
 
-from .penTools import distance
+from fontPens.penTools import distance
 
 
 class ThresholdPointPen(AbstractPointPen):
@@ -91,19 +91,19 @@ def _makeTestGlyph():
 
 def _testThresholdPen():
     """
-    >>> from .printPointPen import PrintPointPen
+    >>> from fontPens.printPointPen import PrintPointPen
     >>> from random import seed
     >>> seed(100)
     >>> glyph = _makeTestGlyph()
     >>> pen = ThresholdPointPen(PrintPointPen())
     >>> glyph.drawPoints(pen)
     pen.beginPath()
-    pen.addPoint((100, 100), segmentType=u'line')
-    pen.addPoint((900, 100), segmentType=u'line')
-    pen.addPoint((900, 800), segmentType=u'line')
-    pen.addPoint((100, 800), segmentType=u'line')
+    pen.addPoint((100, 100), segmentType='line')
+    pen.addPoint((900, 100), segmentType='line')
+    pen.addPoint((900, 800), segmentType='line')
+    pen.addPoint((100, 800), segmentType='line')
     pen.endPath()
-    pen.addComponent(u'a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
+    pen.addComponent('a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
 
 

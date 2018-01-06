@@ -1,6 +1,8 @@
+from __future__ import absolute_import, print_function, division
+
 from fontTools.pens.basePen import AbstractPen
 
-from penTools import distance
+from fontPens.penTools import distance
 
 
 class ThresholdPen(AbstractPen):
@@ -82,7 +84,7 @@ def _makeTestGlyph():
 
 def _testThresholdPen():
     """
-    >>> from printPen import PrintPen
+    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> pen = ThresholdPen(PrintPen())
     >>> glyph.draw(pen)
@@ -91,13 +93,13 @@ def _testThresholdPen():
     pen.lineTo((900, 800))
     pen.lineTo((100, 800))
     pen.closePath()
-    pen.addComponent(u'a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
+    pen.addComponent('a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
 
 
 def _testThresholdGlyph():
     """
-    >>> from printPen import PrintPen
+    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> thresholdGlyph(glyph) #doctest: +ELLIPSIS
     <RGlyph...
@@ -107,7 +109,7 @@ def _testThresholdGlyph():
     pen.lineTo((900, 800))
     pen.lineTo((100, 800))
     pen.closePath()
-    pen.addComponent(u'a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
+    pen.addComponent('a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
 
 

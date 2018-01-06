@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function, division
+
 from fontTools.misc.py23 import *
 from fontTools.pens.basePen import AbstractPen
 
@@ -26,7 +28,7 @@ class PrintPen(AbstractPen):
         print("pen.endPath()")
 
     def addComponent(self, baseGlyphName, transformation):
-        print("pen.addComponent(%r, %s)" % (baseGlyphName, tuple(transformation)))
+        print("pen.addComponent('%s', %s)" % (baseGlyphName, tuple(transformation)))
 
 
 def _testPrintPen():

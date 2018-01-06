@@ -1,4 +1,4 @@
-from __future__ import print_function, division
+from __future__ import absolute_import, print_function, division
 
 from fontTools.misc.py23 import *
 from ufoLib.pointPen import AbstractPointPen
@@ -27,22 +27,22 @@ class PrintPointPen(AbstractPointPen):
         assert self.havePath
         args = ["(%s, %s)" % (pt[0], pt[1])]
         if segmentType is not None:
-            args.append("segmentType=%r" % segmentType)
+            args.append("segmentType='%s'" % segmentType)
         if smooth:
             args.append("smooth=True")
         if name is not None:
-            args.append("name=%r" % name)
+            args.append("name='%s'" % name)
         if identifier is not None:
-            args.append("identifier=%r" % identifier)
+            args.append("identifier='%s'" % identifier)
         if kwargs:
             args.append("**%s" % kwargs)
         print("pen.addPoint(%s)" % ", ".join(args))
 
     def addComponent(self, baseGlyphName, transformation, identifier=None):
         assert not self.havePath
-        args = "%r, %r" % (baseGlyphName, transformation)
+        args = "'%s', %r" % (baseGlyphName, transformation)
         if identifier is not None:
-            args += ", identifier=%r" % identifier
+            args += ", identifier='%s'" % identifier
         print("pen.addComponent(%s)" % args)
 
 

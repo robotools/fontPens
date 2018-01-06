@@ -1,9 +1,11 @@
+from __future__ import absolute_import, print_function, division
+
 import math
 
 from fontTools.misc.py23 import *
 from fontTools.pens.basePen import BasePen
 
-from penTools import getCubicPoint
+from fontPens.penTools import getCubicPoint
 
 
 class AngledMarginPen(BasePen):

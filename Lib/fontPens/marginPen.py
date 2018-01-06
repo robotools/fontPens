@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function, division
+
 from fontTools.pens.basePen import BasePen
 from fontTools.misc.bezierTools import splitLine, splitCubic
 
@@ -158,7 +160,7 @@ def _makeTestGlyph():
 
 def _testMarginPen():
     """
-    >>> from printPen import PrintPen
+    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> pen = MarginPen(dict(), 200, isHorizontal=True)
     >>> glyph.draw(pen)
