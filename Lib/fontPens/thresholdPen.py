@@ -51,7 +51,6 @@ def thresholdGlyph(aGlyph, threshold=10):
     """
     Convenience function that applies the **ThresholdPen** to a glyph. Returns a new glyph object (from objectsRF.RGlyph).
     """
-    from ufoLib.pointPen import SegmentToPointPen
     from fontTools.pens.recordingPen import RecordingPen
     recorder = RecordingPen()
     filterpen = ThresholdPen(recorder, threshold)

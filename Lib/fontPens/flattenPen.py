@@ -102,7 +102,6 @@ def flattenGlyph(aGlyph, threshold=10, segmentLines=True):
     """
     if len(aGlyph) == 0:
         return aGlyph
-    from ufoLib.pointPen import SegmentToPointPen
     from fontTools.pens.recordingPen import RecordingPen
     recorder = RecordingPen()
     filterpen = FlattenPen(recorder, approximateSegmentLength=threshold, segmentLines=segmentLines)
