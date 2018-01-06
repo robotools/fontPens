@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from ufoLib.pointPen import AbstractPointPen
+
 from .penTools import distance
 
 
