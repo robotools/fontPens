@@ -1,3 +1,5 @@
+from __future__ import absolute_import, print_function, division
+
 import math
 from ufoLib.pointPen import AbstractPointPen
 
@@ -71,7 +73,7 @@ class GuessSmoothPointPen(AbstractPointPen):
 
 def _testGuessSmoothPointPen():
     """
-    >>> from printPointPen import PrintPointPen
+    >>> from fontPens.printPointPen import PrintPointPen
     >>> pen = GuessSmoothPointPen(PrintPointPen())
 
     >>> pen.beginPath(identifier="abc123")
