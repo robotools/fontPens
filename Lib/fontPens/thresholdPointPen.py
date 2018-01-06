@@ -1,6 +1,7 @@
-from ufoLib.pointPen import AbstractPointPen
+from __future__ import absolute_import
 
-from penTools import distance
+from ufoLib.pointPen import AbstractPointPen
+from .penTools import distance
 
 
 class ThresholdPointPen(AbstractPointPen):
@@ -89,7 +90,7 @@ def _makeTestGlyph():
 
 def _testThresholdPen():
     """
-    >>> from printPointPen import PrintPointPen
+    >>> from .printPointPen import PrintPointPen
     >>> from random import seed
     >>> seed(100)
     >>> glyph = _makeTestGlyph()
