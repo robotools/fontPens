@@ -95,13 +95,13 @@ def _testThresholdPen():
     >>> glyph = _makeTestGlyph()
     >>> pen = ThresholdPointPen(PrintPointPen())
     >>> glyph.drawPoints(pen)
-    pen.beginPath(identifier=u'9SlhjQnX4S')
+    pen.beginPath()
     pen.addPoint((100, 100), segmentType=u'line')
     pen.addPoint((900, 100), segmentType=u'line')
     pen.addPoint((900, 800), segmentType=u'line')
     pen.addPoint((100, 800), segmentType=u'line')
     pen.endPath()
-    pen.addComponent(u'a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0), u'quilVUa9fr')
+    pen.addComponent(u'a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
 
 
