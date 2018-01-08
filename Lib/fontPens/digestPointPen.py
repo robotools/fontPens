@@ -80,7 +80,6 @@ def _testDigestPointPen():
     >>> pen.beginPath("abc123")
     >>> pen.getDigest()
     (('beginPath', 'abc123'),)
-
     >>> pen.addPoint((10, 10), "move", True)
     >>> pen.addPoint((-10, 100), "line", False)
     >>> pen.endPath()
@@ -88,6 +87,15 @@ def _testDigestPointPen():
     (('beginPath', 'abc123'), ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath')
     >>> pen.getDigestPointsOnly()  # https://github.com/robofab-developers/fontPens/issues/8
     ((-10, 100), (10, 10))
+    >>> pen.beginPath()
+    >>> pen.addPoint((100, 100), 'line')
+    >>> pen.addPoint((100, 10), 'line')
+    >>> pen.addPoint((10, 10), 'line')
+    >>> pen.endPath()
+    >>> pen.getDigest()
+    (('beginPath', 'abc123'), ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath', ('beginPath', None), ((100, 100), 'line', False, None), ((100, 10), 'line', False, None), ((10, 10), 'line', False, None), 'endPath')
+    >>> pen.getDigestPointsOnly()
+    ((-10, 100), (10, 10), (10, 10), (100, 10), (100, 100))
     """
 
 
