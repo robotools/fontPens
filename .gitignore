@@ -8,3 +8,11 @@ __pycache__/
 
 # OSX Finder
 .DS_Store
+
+# directories created during build/install process
+build/
+dist/
+Lib/fontPens.egg-info/
+
+# PyCharm's directory
+.idea/
