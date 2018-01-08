@@ -71,7 +71,7 @@ class FlattenPen(BasePen):
         if falseCurve:
             self._lineTo(pt2)
             return
-        est = calcQuadraticArcLength(self.currentPt, pt1, pt2, approximate_fallback=True) / self.approximateSegmentLength
+        est = calcQuadraticArcLength(self.currentPt, pt1, pt2) / self.approximateSegmentLength
         maxSteps = int(round(est))
         if maxSteps < 1:
             self.otherPen.lineTo(pt2)
