@@ -10,15 +10,17 @@ class PrintPen(AbstractPen):
     """
 
     def moveTo(self, pt):
-        print("pen.moveTo(%s)" % (pt,))
+        print("pen.moveTo(%s)" % (tuple(pt),))
 
     def lineTo(self, pt):
-        print("pen.lineTo(%s)" % (pt,))
+        print("pen.lineTo(%s)" % (tuple(pt),))
 
     def curveTo(self, *pts):
+        pts = tuple(tuple(pt) for pt in pts)
         print("pen.curveTo%s" % (pts,))
 
     def qCurveTo(self, *pts):
+        pts = tuple(tuple(pt) for pt in pts)
         print("pen.qCurveTo%s" % (pts,))
 
     def closePath(self):
@@ -47,6 +49,26 @@ def _testPrintPen():
     >>> pen.endPath()
     pen.endPath()
     >>> pen.addComponent("a", (1, 0, 0, 1, 10, 10))
+    pen.addComponent('a', (1, 0, 0, 1, 10, 10))
+    """
+
+
+def _testPrintPen_nonTuplePoints():
+    """
+    >>> pen = PrintPen()
+    >>> pen.moveTo([10, 10])
+    pen.moveTo((10, 10))
+    >>> pen.lineTo([20, 20])
+    pen.lineTo((20, 20))
+    >>> pen.curveTo([1, 1], [2, 2], [3, 3])
+    pen.curveTo((1, 1), (2, 2), (3, 3))
+    >>> pen.qCurveTo([4, 4], [5, 5])
+    pen.qCurveTo((4, 4), (5, 5))
+    >>> pen.closePath()
+    pen.closePath()
+    >>> pen.endPath()
+    pen.endPath()
+    >>> pen.addComponent("a", [1, 0, 0, 1, 10, 10])
     pen.addComponent('a', (1, 0, 0, 1, 10, 10))
     """
 
