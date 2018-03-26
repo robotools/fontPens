@@ -112,10 +112,10 @@ def flattenGlyph(aGlyph, threshold=10, segmentLines=True):
 
 
 
-class SteppedFlattenPen(BasePen):
+class SamplingPen(BasePen):
     """
     This filter pen processes the contours into a series of straight lines by flattening the curves.
-    Unlike FlattenPen, SteppedFlattenPen draws each curve with the given number of steps.
+    Unlike FlattenPen, SamplingPen draws each curve with the given number of steps.
 
     - otherPen: a different segment pen object this filter should draw the results with.
     - steps: the number of steps for each curve segment.
@@ -176,17 +176,17 @@ class SteppedFlattenPen(BasePen):
 
     def addComponent(self, glyphName, transformation):
         self.otherPen.addComponent(glyphName, transformation)
-        
 
-def steppedFlattenGlyph(aGlyph, steps=10):
+
+def samplingGlyph(aGlyph, steps=10):
     """
-    Convenience function that applies the **SteppedFlattenPen** pen to a glyph in place.
+    Convenience function that applies the **SamplingPen** pen to a glyph in place.
     """
     if len(aGlyph) == 0:
         return aGlyph
     from fontTools.pens.recordingPen import RecordingPen
     recorder = RecordingPen()
-    filterpen = SteppedFlattenPen(recorder, steps=steps)
+    filterpen = SamplingPen(recorder, steps=steps)
     aGlyph.draw(filterpen)
     aGlyph.clear()
     recorder.replay(aGlyph.getPen())
@@ -268,7 +268,7 @@ def _testFlattenPen():
     """
     >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyphWithCurve()
-    >>> pen = SteppedFlattenPen(PrintPen(), steps=2)
+    >>> pen = SamplingPen(PrintPen(), steps=2)
     >>> glyph.draw(pen)
     pen.moveTo((84, 37))
     pen.lineTo((348, 37))
@@ -285,7 +285,7 @@ def _testFlattenGlyph():
     """
     >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyphWithCurve()
-    >>> steppedFlattenGlyph(glyph) #doctest: +ELLIPSIS
+    >>> samplingGlyph(glyph) #doctest: +ELLIPSIS
     <RGlyph...
     >>> glyph.draw(PrintPen())
     pen.moveTo((84, 37))
