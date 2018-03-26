@@ -111,6 +111,87 @@ def flattenGlyph(aGlyph, threshold=10, segmentLines=True):
     return aGlyph
 
 
+
+class SteppedFlattenPen(BasePen):
+    """
+    This filter pen processes the contours into a series of straight lines by flattening the curves.
+    Unlike FlattenPen, SteppedFlattenPen draws each curve with the given number of steps.
+
+    - otherPen: a different segment pen object this filter should draw the results with.
+    - steps: the number of steps for each curve segment.
+    - filterDoubles: don't draw if a segment goes to the same coordinate.
+    """
+
+    def __init__(self, otherPen, steps=10, filterDoubles=True):
+        BasePen.__init__(self, {})
+        self.otherPen = otherPen
+        self.currentPt = None
+        self.firstPt = None
+        self.steps = steps
+        self.filterDoubles = filterDoubles
+
+    def _moveTo(self, pt):
+        self.otherPen.moveTo(pt)
+        self.currentPt = pt
+        self.firstPt = pt
+
+    def _lineTo(self, pt):
+        if self.filterDoubles:
+            if pt == self.currentPt:
+                return
+        self.otherPen.lineTo(pt)
+        self.currentPt = pt
+        return
+
+    def _curveToOne(self, pt1, pt2, pt3):
+        falseCurve = (pt1 == self.currentPt) and (pt2 == pt3)
+        if falseCurve:
+            self._lineTo(pt3)
+            return
+        step = 1.0 / self.steps
+        for factor in range(1, self.steps + 1):
+            pt = getCubicPoint(factor * step, self.currentPt, pt1, pt2, pt3)
+            self.otherPen.lineTo(pt)
+        self.currentPt = pt3
+
+    def _qCurveToOne(self, pt1, pt2):
+        falseCurve = (pt1 == self.currentPt) or (pt1 == pt2)
+        if falseCurve:
+            self._lineTo(pt2)
+            return
+        step = 1.0 / self.steps
+        for factor in range(1, self.steps + 1):
+            pt = getQuadraticPoint(factor * step, self.currentPt, pt1, pt2)
+            self.otherPen.lineTo(pt)
+        self.currentPt = pt2
+
+    def _closePath(self):
+        self.lineTo(self.firstPt)
+        self.otherPen.closePath()
+        self.currentPt = None
+
+    def _endPath(self):
+        self.otherPen.endPath()
+        self.currentPt = None
+
+    def addComponent(self, glyphName, transformation):
+        self.otherPen.addComponent(glyphName, transformation)
+        
+
+def steppedFlattenGlyph(aGlyph, steps=10):
+    """
+    Convenience function that applies the **SteppedFlattenPen** pen to a glyph in place.
+    """
+    if len(aGlyph) == 0:
+        return aGlyph
+    from fontTools.pens.recordingPen import RecordingPen
+    recorder = RecordingPen()
+    filterpen = SteppedFlattenPen(recorder, steps=steps)
+    aGlyph.draw(filterpen)
+    aGlyph.clear()
+    recorder.replay(aGlyph.getPen())
+    return aGlyph
+
 # =========
 # = tests =
 # =========
@@ -167,6 +248,61 @@ def _testFlattenGlyph():
     pen.closePath()
     """
 
+
+def _makeTestGlyphWithCurve():
+    # make a simple glyph that we can test the pens with.
+    from fontParts.nonelab import RGlyph
+    testGlyph = RGlyph()
+    testGlyph.name = "testGlyph"
+    testGlyph.width = 500
+    pen = testGlyph.getPen()
+    pen.moveTo((84, 37))
+    pen.lineTo((348, 37))
+    pen.lineTo((348, 300))
+    pen.curveTo((265, 350.0), (177, 350.0), (84, 300))
+    pen.closePath()
+    return testGlyph
+
+
+def _testFlattenPen():
+    """
+    >>> from fontPens.printPen import PrintPen
+    >>> glyph = _makeTestGlyphWithCurve()
+    >>> pen = SteppedFlattenPen(PrintPen(), steps=2)
+    >>> glyph.draw(pen)
+    pen.moveTo((84, 37))
+    pen.lineTo((348, 37))
+    pen.lineTo((348, 300))
+    pen.lineTo((219.75, 337.5))
+    pen.lineTo((84, 300))
+    pen.lineTo((84, 37))
+    pen.closePath()
+
+    """
+
+
+def _testFlattenGlyph():
+    """
+    >>> from fontPens.printPen import PrintPen
+    >>> glyph = _makeTestGlyphWithCurve()
+    >>> steppedFlattenGlyph(glyph) #doctest: +ELLIPSIS
+    <RGlyph...
+    >>> glyph.draw(PrintPen())
+    pen.moveTo((84, 37))
+    pen.lineTo((348, 37))
+    pen.lineTo((348, 300))
+    pen.lineTo((322.95, 313.5))
+    pen.lineTo((297.6, 324.0))
+    pen.lineTo((271.95, 331.5))
+    pen.lineTo((246.0, 336.0))
+    pen.lineTo((219.75, 337.5))
+    pen.lineTo((193.19999999999996, 336.0))
+    pen.lineTo((166.35, 331.5))
+    pen.lineTo((139.2, 324.0))
+    pen.lineTo((111.75, 313.5))
+    pen.lineTo((84, 300))
+    pen.closePath()
+    """
 
 if __name__ == "__main__":
     import doctest
