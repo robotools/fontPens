@@ -32,7 +32,7 @@ class ThresholdPointPen(AbstractPointPen):
 
     def addPoint(self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         """Add a point to the current sub path."""
-        if segmentType in ['curve', 'qcurve']:
+        if segmentType in (None, 'offcurve'):
             # it's an offcurve, let's buffer them until we get another oncurve
             # and we know what to do with them
             self._offCurveBuffer.append((pt, segmentType, smooth, name, identifier, kwargs))
@@ -44,7 +44,7 @@ class ThresholdPointPen(AbstractPointPen):
             self._lastPt = pt
             self._offCurveBuffer = []
 
-        elif segmentType == "line":
+        elif segmentType in ['line', 'curve', 'qcurve']:
             if self._lastPt is None:
                 self.otherPointPen.addPoint(pt, segmentType, smooth, name, identifier) # how to add kwargs?
                 self._lastPt = pt
