@@ -68,6 +68,19 @@ class ThresholdPointPen(AbstractPointPen):
         self.otherPointPen.addComponent(baseGlyphName, transformation, identifier)
 
 
+def thresholdPointGlyph(aGlyph, threshold=10):
+    """
+    Convenience function that applies the **ThresholdPointPen** to a glyph in place.
+    """
+    from fontPens.recordingPointPen import RecordingPointPen
+    recorder = RecordingPointPen()
+    filterpen = ThresholdPointPen(recorder, threshold)
+    aGlyph.drawPoints(filterpen)
+    aGlyph.clear()
+    recorder.replay(aGlyph.getPointPen())
+    return aGlyph
+
+
 # =========
 # = tests =
 # =========
