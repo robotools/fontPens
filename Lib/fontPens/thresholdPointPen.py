@@ -96,7 +96,8 @@ def _makeTestGlyph():
     pen.lineTo((900, 100))
     pen.lineTo((900, 109))
     pen.lineTo((900, 800))
-    pen.lineTo((100, 800))
+    pen.curveTo((634, 800), (366, 800), (100, 800))
+    pen.curveTo((100, 798), (100, 794), (100, 791))
     pen.closePath()
     pen.addComponent("a", (1, 0, 0, 1, 0, 0))
     return testGlyph
@@ -114,7 +115,9 @@ def _testThresholdPen():
     pen.addPoint((100, 100), segmentType='line')
     pen.addPoint((900, 100), segmentType='line')
     pen.addPoint((900, 800), segmentType='line')
-    pen.addPoint((100, 800), segmentType='line')
+    pen.addPoint((634, 800))
+    pen.addPoint((366, 800))
+    pen.addPoint((100, 800), segmentType='curve')
     pen.endPath()
     pen.addComponent('a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
