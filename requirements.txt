@@ -1,5 +1,4 @@
 distutils
 setuptools
 sys
-__future__
 math
