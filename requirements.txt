@@ -1,4 +1,1 @@
-distutils
 setuptools
-sys
-math
