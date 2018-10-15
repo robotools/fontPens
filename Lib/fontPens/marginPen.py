@@ -142,7 +142,7 @@ class MarginPen(BasePen):
 
 def _makeTestGlyph():
     # make a simple glyph that we can test the pens with.
-    from fontParts.nonelab import RGlyph
+    from fontParts.fontshell import RGlyph
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 1000
