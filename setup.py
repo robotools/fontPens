@@ -160,6 +160,7 @@ setup_params = dict(
     setup_requires=pytest_runner + wheel + bump2version,
     tests_require=[
         'pytest',
+        'fontparts>=0.8.1'
     ],
     install_requires=[
         "fonttools>=3.20.0",
