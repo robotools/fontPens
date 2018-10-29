@@ -19,17 +19,17 @@ class RecordingPointPen(AbstractPointPen):
     def __init__(self):
         self.value = []
 
-    def beginPath(self, **kwargs):
-        self.value.append(("beginPath", (), kwargs))
+    def beginPath(self, identifier=None, **kwargs):
+        self.value.append(("beginPath", (identifier,), kwargs))
 
     def endPath(self):
         self.value.append(("endPath", (), {}))
 
-    def addPoint(self, pt, segmentType=None, smooth=False, name=None, **kwargs):
-        self.value.append(("addPoint", (pt, segmentType, smooth, name), kwargs))
+    def addPoint(self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
+        self.value.append(("addPoint", (pt, segmentType, smooth, name, identifier), kwargs))
 
-    def addComponent(self, baseGlyphName, transformation, **kwargs):
-        self.value.append(("addComponent", (baseGlyphName, transformation), kwargs))
+    def addComponent(self, baseGlyphName, transformation, identifier=None, **kwargs):
+        self.value.append(("addComponent", (baseGlyphName, transformation, identifier), kwargs))
 
     def replay(self, pen):
         replayRecording(self.value, pen)
@@ -39,8 +39,8 @@ def _test():
     """
         >>> from fontPens.printPointPen import PrintPointPen
         >>> pen = RecordingPointPen()
-        >>> pen.beginPath()
-        >>> pen.addPoint((100, 200), smooth=False, segmentType="line")
+        >>> pen.beginPath('my_path_id')
+        >>> pen.addPoint((100, 200), smooth=False, segmentType="line", my_kwarg='foo')
         >>> pen.endPath()
         >>> pen.beginPath()
         >>> pen.addPoint((200, 300), segmentType="line")
@@ -51,8 +51,8 @@ def _test():
         >>> assert pen.value == pen2.value
         >>> ppp = PrintPointPen()
         >>> pen2.replay(ppp)
-        pen.beginPath()
-        pen.addPoint((100, 200), segmentType='line')
+        pen.beginPath(identifier='my_path_id')
+        pen.addPoint((100, 200), segmentType='line', **{'my_kwarg': 'foo'})
         pen.endPath()
         pen.beginPath()
         pen.addPoint((200, 300), segmentType='line')
