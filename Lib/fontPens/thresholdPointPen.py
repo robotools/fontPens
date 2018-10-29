@@ -32,7 +32,7 @@ class ThresholdPointPen(AbstractPointPen):
 
     def addPoint(self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
         """Add a point to the current sub path."""
-        if segmentType in ['curve', 'qcurve']:
+        if segmentType in (None, 'offcurve'):
             # it's an offcurve, let's buffer them until we get another oncurve
             # and we know what to do with them
             self._offCurveBuffer.append((pt, segmentType, smooth, name, identifier, kwargs))
@@ -44,7 +44,7 @@ class ThresholdPointPen(AbstractPointPen):
             self._lastPt = pt
             self._offCurveBuffer = []
 
-        elif segmentType == "line":
+        elif segmentType in ['line', 'curve', 'qcurve']:
             if self._lastPt is None:
                 self.otherPointPen.addPoint(pt, segmentType, smooth, name, identifier) # how to add kwargs?
                 self._lastPt = pt
@@ -68,6 +68,19 @@ class ThresholdPointPen(AbstractPointPen):
         self.otherPointPen.addComponent(baseGlyphName, transformation, identifier) # how to add kwargs?
 
 
+def thresholdPointGlyph(aGlyph, threshold=10):
+    """
+    Convenience function that applies the **ThresholdPointPen** to a glyph in place.
+    """
+    from fontPens.recordingPointPen import RecordingPointPen
+    recorder = RecordingPointPen()
+    filterpen = ThresholdPointPen(recorder, threshold)
+    aGlyph.drawPoints(filterpen)
+    aGlyph.clear()
+    recorder.replay(aGlyph.getPointPen())
+    return aGlyph
+
+
 # =========
 # = tests =
 # =========
@@ -83,7 +96,8 @@ def _makeTestGlyph():
     pen.lineTo((900, 100))
     pen.lineTo((900, 109))
     pen.lineTo((900, 800))
-    pen.lineTo((100, 800))
+    pen.curveTo((634, 800), (366, 800), (100, 800))
+    pen.curveTo((100, 798), (100, 794), (100, 791))
     pen.closePath()
     pen.addComponent("a", (1, 0, 0, 1, 0, 0))
     return testGlyph
@@ -101,7 +115,9 @@ def _testThresholdPen():
     pen.addPoint((100, 100), segmentType='line')
     pen.addPoint((900, 100), segmentType='line')
     pen.addPoint((900, 800), segmentType='line')
-    pen.addPoint((100, 800), segmentType='line')
+    pen.addPoint((634, 800))
+    pen.addPoint((366, 800))
+    pen.addPoint((100, 800), segmentType='curve')
     pen.endPath()
     pen.addComponent('a', (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
     """
