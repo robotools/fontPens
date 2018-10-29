@@ -42,9 +42,9 @@ def _test():
         >>> pen.beginPath()
         >>> pen.addPoint((100, 200), smooth=False, segmentType="line")
         >>> pen.endPath()
-        >>> pen.beginPath()
+        >>> pen.beginPath(identifier="my_path_id")
         >>> pen.addPoint((200, 300), segmentType="line")
-        >>> pen.addPoint((200, 400), segmentType="line")
+        >>> pen.addPoint((200, 400), segmentType="line", identifier="my_point_id")
         >>> pen.endPath()
         >>> pen2 = RecordingPointPen()
         >>> pen.replay(pen2)
@@ -54,9 +54,9 @@ def _test():
         pen.beginPath()
         pen.addPoint((100, 200), segmentType='line')
         pen.endPath()
-        pen.beginPath()
+        pen.beginPath(identifier='my_path_id')
         pen.addPoint((200, 300), segmentType='line')
-        pen.addPoint((200, 400), segmentType='line')
+        pen.addPoint((200, 400), segmentType='line', identifier='my_point_id')
         pen.endPath()
     """
 
