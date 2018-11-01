@@ -1,7 +1,7 @@
 from __future__ import absolute_import, print_function, division
 
 import math
-from ufoLib.pointPen import AbstractPointPen
+from fontTools.ufoLib.pointPen import AbstractPointPen
 
 
 class GuessSmoothPointPen(AbstractPointPen):

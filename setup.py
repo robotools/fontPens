@@ -163,8 +163,7 @@ setup_params = dict(
         'fontparts>=0.8.1'
     ],
     install_requires=[
-        "fonttools>=3.20.0",
-        "ufoLib>=2.0",
+        "FontTools[ufo,lxml,unicode]>=3.32.0",
     ],
     cmdclass={
         "release": release,

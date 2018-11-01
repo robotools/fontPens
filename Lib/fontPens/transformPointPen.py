@@ -1,6 +1,6 @@
 from __future__ import absolute_import, print_function, division
 
-from ufoLib.pointPen import AbstractPointPen
+from fontTools.ufoLib.pointPen import AbstractPointPen
 
 
 class TransformPointPen(AbstractPointPen):
