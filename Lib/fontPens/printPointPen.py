@@ -1,7 +1,7 @@
 from __future__ import absolute_import, print_function, division
 
 from fontTools.misc.py23 import *
-from fontTools.ufoLib.pointPen import AbstractPointPen
+from fontTools.pens.pointPen import AbstractPointPen
 
 
 class PrintPointPen(AbstractPointPen):
