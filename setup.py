@@ -143,7 +143,7 @@ with open('README.rst', 'r') as f:
 
 setup_params = dict(
     name="fontPens",
-    version="0.2.0.dev0",
+    version="0.2.0",
     description=("A collection of classes implementing the pen "
                  "protocol for manipulating glyphs."),
     author="Just van Rossum, Tal Leming, Erik van Blokland, others",
