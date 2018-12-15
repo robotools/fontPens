@@ -89,7 +89,7 @@ deploy:
     password:
       secure: "dQmUNMwDeq7162p3IE3M9d9BW3lfk/chaW8SY605YikW7J56bfT1CQFaOiYumdvMF/eWBrVxbQbdwdupL2sDm1dSgYKWu0ite1jePaoTkMhEKFr+XW7GogcX+LOiFa7FITscnWgV02XwijStbklQmZ2beBe/tjB5Ug/Swx6CVCsTN/j1n0+r3UjtHcsnVgN+XAhpC0+ewoyKkoKP/aalb2gGFwsRDh2SzJZ/sOICHmmjJUGDB6/vS8tGgnI1arDSpSH7KDNB1dVAfDvjK9yXFEDPkYO5vEU//vZWP9yKTqXPmDiv+SMg959UcdgCUnNPSv44/VDtqv9kNhG4t3Ye4bjV/WBnyZ3SiWF8XHI+r3nk6x6Swjhq8ZRPk861JhDPK67kCJHdmMjOfaKy+MoTWscDqLlzxxAABSv+HkgQ3LiHKqBbvJVBbuhbmFdo8qtmZXKl4z8LlUcTHskMAioEMbueKRW/+jEDN5xm0h7c4W2mfHyrnn3Td5hWpmXZKe7ZKqbU8koBruGJpnC6miE689nO6HLpQbW8AjYy6ZOkz4HbkZCAYh0NqYe7qwgFKx8+iYy5smWyiqAS7A4D1kyFzaXV5jEe87jddDc/wMofgcKSUBOGe9eM/w4FKVRCW8jAMkjMiZKVMzHE2f9nk9q4A8bU++Da/AgIw3JKOVnWAPg="
     skip_cleanup: true
-    distributions: pass
+    distributions: "sdist bdist_wheel"
     on:
       tags: true
       repo: robofab-developers/fontPens
