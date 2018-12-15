@@ -5,6 +5,11 @@ __pycache__/
 
 .cache
 .eggs
+.tox
+.coverage
+.coverage.*
+.pytest_cache
+htmlcov
 
 # OSX Finder
 .DS_Store
