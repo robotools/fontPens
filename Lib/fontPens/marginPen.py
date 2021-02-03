@@ -94,14 +94,6 @@ class MarginPen(BasePen):
     def _endPath(self):
         self.currentPt = None
 
-    def addComponent(self, baseGlyph, transformation):
-        if self.glyphSet is None:
-            return
-        if baseGlyph in self.glyphSet:
-            glyph = self.glyphSet[baseGlyph]
-        if glyph is not None:
-            glyph.draw(self)
-
     def getMargins(self):
         """
         Return the extremes of the slice for all contours combined, i.e. the whole glyph.
@@ -154,18 +146,43 @@ def _makeTestGlyph():
     # a curve
     pen.curveTo((120, 700), (120, 300), (100, 100))
     pen.closePath()
-    # pen.addComponent("a", (1, 0, 0, 1, 0, 0))
     return testGlyph
 
 
 def _testMarginPen():
     """
-    >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyph()
     >>> pen = MarginPen(dict(), 200, isHorizontal=True)
     >>> glyph.draw(pen)
     >>> pen.getAll()
     [107.5475, 900.0]
+    """
+
+
+def _makeTestFont():
+    # make a simple glyph that we can test the pens with.
+    from fontParts.fontshell import RFont
+    testFont = RFont()
+    baseGlyph = testFont.newGlyph("baseGlyph")
+    pen = baseGlyph.getPen()
+    pen.moveTo((100, 100))
+    pen.lineTo((600, 100))
+    pen.lineTo((600, 600))
+    pen.lineTo((100, 600))
+    pen.closePath()
+
+    testGlyph = testFont.newGlyph("testGlyph")
+    testGlyph.appendComponent("baseGlyph", scale=.5)
+    return testGlyph
+
+
+def _testMarginPenComponent():
+    """
+    >>> glyph = _makeTestFont()
+    >>> pen = MarginPen(glyph.layer, 200, isHorizontal=True)
+    >>> glyph.draw(pen)
+    >>> pen.getAll()
+    [50.0, 300.0]
     """
 
 
