@@ -1,8 +1,5 @@
-from __future__ import absolute_import, print_function, division
-
 import math
 
-from fontTools.misc.py23 import *
 from fontTools.misc.bezierTools import calcQuadraticArcLengthC
 
 
@@ -140,7 +137,6 @@ def estimateCubicCurveLength(pt0, pt1, pt2, pt3, precision=10):
     >>> estimateCubicCurveLength((0, 0), (50, -10), (80, 50), (120, 40), 1000)
     130.4488917899906
     """
-    
     length = 0
     step = 1.0 / precision
     points = getCubicPoints([f * step for f in range(precision + 1)], pt0, pt1, pt2, pt3)
@@ -161,7 +157,7 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     >>> estimateQuadraticCurveLength((0, 0), (50, 0), (80, 0)) # collinear points
     80.0
     >>> estimateQuadraticCurveLength((0, 0), (50, 20), (100, 40)) # collinear points
-    107.70329614269009
+    107.70329614269008
     >>> estimateQuadraticCurveLength((0, 0), (0, 100), (100, 0))
     153.6861437729263
     >>> estimateQuadraticCurveLength((0, 0), (50, -10), (80, 50))
