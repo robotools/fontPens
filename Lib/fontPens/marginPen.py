@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function, division
-
 from fontTools.pens.basePen import BasePen
 from fontTools.misc.bezierTools import splitLine, splitCubic
 

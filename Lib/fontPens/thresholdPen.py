@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function, division
-
 from fontTools.pens.basePen import AbstractPen
 
 from fontPens.penTools import distance

@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function, division
-
 import math
 from fontTools.pens.pointPen import AbstractPointPen
 
