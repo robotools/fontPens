@@ -40,29 +40,17 @@ class AngledMarginPen(BasePen):
     def _moveTo(self, pt):
         self._start = self.currentPoint = pt
 
-    def _addMoveTo(self):
-        if self._start is None:
-            return
-        self._start = self.currentPoint = None
-
     def _lineTo(self, pt):
-        self._addMoveTo()
         self._getAngled(pt)
         self.currentPoint = pt
 
     def _curveToOne(self, pt1, pt2, pt3):
-        self._addMoveTo()
         step = 1.0 / self.maxSteps
         factors = range(0, self.maxSteps + 1)
         for i in factors:
             pt = getCubicPoint(i * step, self.currentPoint, pt1, pt2, pt3)
             self._getAngled(pt)
         self.currentPoint = pt3
-
-    def _qCurveToOne(self, bcp, pt):
-        self._addMoveTo()
-        self._getAngled(pt)
-        self.currentPoint = pt
 
 
 def getAngledMargins(glyph, font):
@@ -79,7 +67,7 @@ def setAngledLeftMargin(glyph, font, value):
     Convenience function, sets the left angled margin to value. Adjusted for font.info.italicAngle.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
-    g.draw(pen)
+    glyph.draw(pen)
     isLeft, isRight = pen.margin
     glyph.leftMargin += value - isLeft
 
@@ -89,7 +77,7 @@ def setAngledRightMargin(glyph, font, value):
     Convenience function, sets the right angled margin to value. Adjusted for font.info.italicAngle.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
-    g.draw(pen)
+    glyph.draw(pen)
     isLeft, isRight = pen.margin
     glyph.rightMargin += value - isRight
 
@@ -99,7 +87,7 @@ def centerAngledMargins(glyph, font):
     Convenience function, centers the glyph on angled margins.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
-    g.draw(pen)
+    glyph.draw(pen)
     isLeft, isRight = pen.margin
     setAngledLeftMargin(glyph, font, (isLeft + isRight) * .5)
     setAngledRightMargin(glyph, font, (isLeft + isRight) * .5)
