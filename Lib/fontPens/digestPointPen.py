@@ -14,7 +14,7 @@ class DigestPointPen(AbstractPointPen):
         self.ignoreSmoothAndName = ignoreSmoothAndName
 
     def beginPath(self, identifier=None):
-        self._data.append(('beginPath', identifier))
+        self._data.append('beginPath')
 
     def endPath(self):
         self._data.append('endPath')
@@ -77,12 +77,12 @@ def _testDigestPointPen():
     >>> pen = DigestPointPen()
     >>> pen.beginPath("abc123")
     >>> pen.getDigest()
-    (('beginPath', 'abc123'),)
+    ('beginPath',)
     >>> pen.addPoint((10, 10), "move", True)
     >>> pen.addPoint((-10, 100), "line", False)
     >>> pen.endPath()
     >>> pen.getDigest()
-    (('beginPath', 'abc123'), ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath')
+    ('beginPath', ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath')
     >>> pen.getDigestPointsOnly()  # https://github.com/robofab-developers/fontPens/issues/8
     ((-10, 100), (10, 10))
     >>> pen.beginPath()
@@ -91,7 +91,7 @@ def _testDigestPointPen():
     >>> pen.addPoint((10, 10), 'line')
     >>> pen.endPath()
     >>> pen.getDigest()
-    (('beginPath', 'abc123'), ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath', ('beginPath', None), ((100, 100), 'line', False, None), ((100, 10), 'line', False, None), ((10, 10), 'line', False, None), 'endPath')
+    ('beginPath', ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath', 'beginPath', ((100, 100), 'line', False, None), ((100, 10), 'line', False, None), ((10, 10), 'line', False, None), 'endPath')
     >>> pen.getDigestPointsOnly()
     ((-10, 100), (10, 10), (10, 10), (100, 10), (100, 100))
     """
