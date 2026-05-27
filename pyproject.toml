@@ -44,3 +44,9 @@ source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "Lib/fontPens/_version.py"
+
+
+[tool.pytest]
+minversion = "9.0"
+addopts = ["-ra", "-v", "--doctest-modules"]
+testpaths = ["Lib/fontPens"]
