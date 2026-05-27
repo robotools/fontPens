@@ -1,3 +1,0 @@
-pytest>=3.0
-tox>=2.5
-fontParts>=0.8.4

@@ -1,3 +1,56 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "fontPens"
+description = "A collection of classes implementing the pen protocol for manipulating glyphs."
+readme = "README.rst"
+authors = [
+    { name = "Tal Leming" },
+    { name = "Erik van Blokland" },
+    { name = "Ben Kiel" },
+    { name = "Frederik Berlaen" },
+    { name = "Just van Rossum", email = "justvanrossum@gmail.com" }
+]
+keywords = ["font", "fonts"]
+license = "OpenSource, BSD-style"
+license-files = ["LICENSE.txt"]
+dynamic = ["version"]
+requires-python = ">=3.10"
+dependencies = [
+    "fonttools>=4.40",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Other Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+]
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["Lib/fontPens"]
+
+
+[tool.hatch.version]
+source = "vcs"
+
+
+[tool.hatch.build.hooks.vcs]
+version-file = "Lib/fontPens/_version.py"
+
+
+[tool.pytest]
+minversion = "9.0"
+addopts = ["-ra", "-v", "--doctest-modules"]
+testpaths = ["Lib/fontPens"]

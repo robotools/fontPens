@@ -21,3 +21,6 @@ Lib/fontPens.egg-info/
 
 # PyCharm's directory
 .idea/
+
+# vcs
+Lib/fontPens/_version.py
