@@ -7,7 +7,8 @@ from fontPens.penTools import getCubicPoint
 
 class AngledMarginPen(BasePen):
     """
-    Pen to calculate the margins according to a slanted coordinate system. Slant angle comes from font.info.italicAngle.
+    Pen to calculate the margins according to a slanted coordinate system. Slant angle
+    comes from font.info.italicAngle.
 
     - this pen works on the on-curve points, and approximates the distance to curves.
     - results will be float.
@@ -55,7 +56,8 @@ class AngledMarginPen(BasePen):
 
 def getAngledMargins(glyph, font):
     """
-    Convenience function, returns the angled margins for this glyph. Adjusted for font.info.italicAngle.
+    Convenience function, returns the angled margins for this glyph.
+    Adjusted for font.info.italicAngle.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
     glyph.draw(pen)
@@ -64,7 +66,8 @@ def getAngledMargins(glyph, font):
 
 def setAngledLeftMargin(glyph, font, value):
     """
-    Convenience function, sets the left angled margin to value. Adjusted for font.info.italicAngle.
+    Convenience function, sets the left angled margin to value.
+    Adjusted for font.info.italicAngle.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
     glyph.draw(pen)
@@ -74,7 +77,8 @@ def setAngledLeftMargin(glyph, font, value):
 
 def setAngledRightMargin(glyph, font, value):
     """
-    Convenience function, sets the right angled margin to value. Adjusted for font.info.italicAngle.
+    Convenience function, sets the right angled margin to value.
+    Adjusted for font.info.italicAngle.
     """
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
     glyph.draw(pen)

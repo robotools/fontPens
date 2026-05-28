@@ -1,7 +1,5 @@
 import math
 
-from fontTools.misc.bezierTools import calcQuadraticArcLengthC
-
 
 def distance(pt1, pt2):
     """
@@ -103,7 +101,7 @@ def getCubicPoints(ts, pt0, pt1, pt2, pt3):
 
     >>> getCubicPoints([i/10 for i in range(11)], (0, 0), (50, -10), (80, 50), (120, 40))
     [(0.0, 0.0), (14.43, -1.0399999999999996), (27.84, 1.280000000000002), (40.41, 6.119999999999999), (52.32, 12.640000000000008), (63.75, 20.0), (74.88, 27.36), (85.89, 33.88), (96.96, 38.72000000000001), (108.27000000000001, 41.040000000000006), (120.0, 40.0)]
-    """
+    """  # noqa E501
     (x0, y0), (x1, y1) = pt0, pt1
     cx = (x1 - x0) * 3
     cy = (y1 - y0) * 3
@@ -168,7 +166,7 @@ def estimateQuadraticCurveLength(pt0, pt1, pt2, precision=10):
     66.39999999999999
     >>> estimateQuadraticCurveLength((0, 0), (40, 0), (0, 0)) # collinear points, looping back
     40.0
-    """
+    """  # noqa E501
     points = []
     length = 0
     step = 1.0 / precision
