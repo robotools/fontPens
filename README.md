@@ -1,16 +1,20 @@
-|Build Status| |Coverage| |PyPI| |Versions|
-
-fontPens
---------
+# fontPens
 
 A collection of classes implementing the pen protocol for manipulating glyphs.
 
+## Maintainers: how to release
 
-.. |Build Status| image:: https://travis-ci.org/robotools/fontPens.svg?branch=master
-   :target: https://travis-ci.org/robotools/fontPens
-.. |PyPI| image:: https://img.shields.io/pypi/v/fontPens.svg
-   :target: https://pypi.org/project/fontPens
-.. |Versions| image:: https://img.shields.io/badge/python-2.7%2C%203.7-blue.svg
-   :alt: Python Versions
-.. |Coverage| image:: https://codecov.io/gh/robotools/fontPens/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/robotools/fontPens
+To cut a release, make an annotated git tag, where the tag is in this format:
+v1.2.3, where 1, 2 and 3 represent major, minor and micro version numbers.
+You can add "aN" or "bN" or "rc" to mark alpha, beta or "release candidate"
+versions. Examples: v1.2.3, v1.2.3b2, v1.2.3a4, v1.2.3rc.
+
+The message for the annotated tag should contain the release notes.
+
+Then use "git push --follow-tags" to trigger the release bot. Example session:
+
+- `$ git tag -a v1.2.3 -m "v1.2.3 -- fixed issue #12345"`
+- `$ git push --follow-tags`
+
+This process will create a GitHub release, as well as upload the package to
+PyPI.
