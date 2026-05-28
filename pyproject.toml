@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 [project]
 name = "fontPens"
 description = "A collection of classes implementing the pen protocol for manipulating glyphs."
-readme = "README.rst"
+readme = "README.md"
 authors = [
     { name = "Tal Leming" },
     { name = "Erik van Blokland" },
