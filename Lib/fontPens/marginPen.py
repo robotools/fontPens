@@ -130,9 +130,11 @@ class MarginPen(BasePen):
 # = tests =
 # =========
 
+
 def _makeTestGlyph():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 1000
@@ -160,6 +162,7 @@ def _testMarginPen():
 def _makeTestFont():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RFont
+
     testFont = RFont()
     baseGlyph = testFont.newGlyph("baseGlyph")
     pen = baseGlyph.getPen()
@@ -170,7 +173,7 @@ def _makeTestFont():
     pen.closePath()
 
     testGlyph = testFont.newGlyph("testGlyph")
-    testGlyph.appendComponent("baseGlyph", scale=.5)
+    testGlyph.appendComponent("baseGlyph", scale=0.5)
     return testGlyph
 
 
@@ -186,4 +189,5 @@ def _testMarginPenComponent():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

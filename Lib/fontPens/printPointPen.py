@@ -20,7 +20,9 @@ class PrintPointPen(AbstractPointPen):
         self.havePath = False
         print("pen.endPath()")
 
-    def addPoint(self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs):
+    def addPoint(
+        self, pt, segmentType=None, smooth=False, name=None, identifier=None, **kwargs
+    ):
         assert self.havePath
         args = ["(%s, %s)" % (pt[0], pt[1])]
         if segmentType is not None:
@@ -67,4 +69,5 @@ def _testPrintPointPen():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

@@ -18,7 +18,7 @@ def distance(pt1, pt2):
     >>> distance((10, 10), (13, 14))
     5.0
     """
-    return math.sqrt((pt1[0] - pt2[0])**2 + (pt1[1] - pt2[1])**2)
+    return math.sqrt((pt1[0] - pt2[0]) ** 2 + (pt1[1] - pt2[1]) ** 2)
 
 
 def middlePoint(pt1, pt2):
@@ -62,7 +62,7 @@ def getCubicPoint(t, pt0, pt1, pt2, pt3):
         by = (pt2[1] - pt1[1]) * 3 - cy
         ax = pt3[0] - pt0[0] - cx - bx
         ay = pt3[1] - pt0[1] - cy - by
-        t3 = t ** 3
+        t3 = t**3
         t2 = t * t
         x = ax * t3 + bx * t2 + cx * t + pt0[0]
         y = ay * t3 + by * t2 + cy * t + pt0[1]
@@ -90,10 +90,10 @@ def getQuadraticPoint(t, pt0, pt1, pt2):
         return pt2
     a = (1 - t) ** 2
     b = 2 * (1 - t) * t
-    c = t ** 2
+    c = t**2
 
-    x = a * pt0[0] + b * pt1[0] + c * pt2[0];
-    y = a * pt0[1] + b * pt1[1] + c * pt2[1];
+    x = a * pt0[0] + b * pt1[0] + c * pt2[0]
+    y = a * pt0[1] + b * pt1[1] + c * pt2[1]
     return x, y
 
 
@@ -113,7 +113,7 @@ def getCubicPoints(ts, pt0, pt1, pt2, pt3):
     ay = pt3[1] - y0 - cy - by
     path = []
     for t in ts:
-        t3 = t ** 3
+        t3 = t**3
         t2 = t * t
         x = ax * t3 + bx * t2 + cx * t + x0
         y = ay * t3 + by * t2 + cy * t + y0
@@ -139,7 +139,9 @@ def estimateCubicCurveLength(pt0, pt1, pt2, pt3, precision=10):
     """
     length = 0
     step = 1.0 / precision
-    points = getCubicPoints([f * step for f in range(precision + 1)], pt0, pt1, pt2, pt3)
+    points = getCubicPoints(
+        [f * step for f in range(precision + 1)], pt0, pt1, pt2, pt3
+    )
     for i in range(len(points) - 1):
         pta = points[i]
         ptb = points[i + 1]
@@ -200,4 +202,5 @@ def interpolatePoint(pt1, pt2, v):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

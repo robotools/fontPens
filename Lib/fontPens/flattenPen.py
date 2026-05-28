@@ -1,7 +1,13 @@
 from fontTools.misc.bezierTools import calcQuadraticArcLength
 from fontTools.pens.basePen import BasePen
 
-from fontPens.penTools import estimateCubicCurveLength, distance, interpolatePoint, getCubicPoint, getQuadraticPoint
+from fontPens.penTools import (
+    estimateCubicCurveLength,
+    distance,
+    interpolatePoint,
+    getCubicPoint,
+    getQuadraticPoint,
+)
 
 
 class FlattenPen(BasePen):
@@ -14,7 +20,13 @@ class FlattenPen(BasePen):
     - filterDoubles: don't draw if a segment goes to the same coordinate.
     """
 
-    def __init__(self, otherPen, approximateSegmentLength=5, segmentLines=False, filterDoubles=True):
+    def __init__(
+        self,
+        otherPen,
+        approximateSegmentLength=5,
+        segmentLines=False,
+        filterDoubles=True,
+    ):
         self.approximateSegmentLength = approximateSegmentLength
         BasePen.__init__(self, {})
         self.otherPen = otherPen
@@ -52,7 +64,10 @@ class FlattenPen(BasePen):
         if falseCurve:
             self._lineTo(pt3)
             return
-        est = estimateCubicCurveLength(self.currentPt, pt1, pt2, pt3) / self.approximateSegmentLength
+        est = (
+            estimateCubicCurveLength(self.currentPt, pt1, pt2, pt3)
+            / self.approximateSegmentLength
+        )
         maxSteps = int(round(est))
         if maxSteps < 1:
             self.otherPen.lineTo(pt3)
@@ -69,7 +84,10 @@ class FlattenPen(BasePen):
         if falseCurve:
             self._lineTo(pt2)
             return
-        est = calcQuadraticArcLength(self.currentPt, pt1, pt2) / self.approximateSegmentLength
+        est = (
+            calcQuadraticArcLength(self.currentPt, pt1, pt2)
+            / self.approximateSegmentLength
+        )
         maxSteps = int(round(est))
         if maxSteps < 1:
             self.otherPen.lineTo(pt2)
@@ -101,13 +119,15 @@ def flattenGlyph(aGlyph, threshold=10, segmentLines=True):
     if len(aGlyph) == 0:
         return aGlyph
     from fontTools.pens.recordingPen import RecordingPen
+
     recorder = RecordingPen()
-    filterpen = FlattenPen(recorder, approximateSegmentLength=threshold, segmentLines=segmentLines)
+    filterpen = FlattenPen(
+        recorder, approximateSegmentLength=threshold, segmentLines=segmentLines
+    )
     aGlyph.draw(filterpen)
     aGlyph.clear()
     recorder.replay(aGlyph.getPen())
     return aGlyph
-
 
 
 class SamplingPen(BasePen):
@@ -183,6 +203,7 @@ def samplingGlyph(aGlyph, steps=10):
     if len(aGlyph) == 0:
         return aGlyph
     from fontTools.pens.recordingPen import RecordingPen
+
     recorder = RecordingPen()
     filterpen = SamplingPen(recorder, steps=steps)
     aGlyph.draw(filterpen)
@@ -190,13 +211,16 @@ def samplingGlyph(aGlyph, steps=10):
     recorder.replay(aGlyph.getPen())
     return aGlyph
 
+
 # =========
 # = tests =
 # =========
 
+
 def _makeTestGlyph():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 500
@@ -250,6 +274,7 @@ def _testFlattenGlyph():
 def _makeTestGlyphWithCurve():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 500
@@ -302,6 +327,8 @@ def _testFlattenGlyph():
     pen.closePath()
     """
 
+
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
