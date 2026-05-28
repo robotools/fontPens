@@ -93,7 +93,7 @@ def _testDigestPointPen():
     ('beginPath', ((10, 10), 'move', True, None), ((-10, 100), 'line', False, None), 'endPath', 'beginPath', ((100, 100), 'line', False, None), ((100, 10), 'line', False, None), ((10, 10), 'line', False, None), 'endPath')
     >>> pen.getDigestPointsOnly()
     ((-10, 100), (10, 10), (10, 10), (100, 10), (100, 100))
-    """
+    """  # noqa: E501
 
 
 if __name__ == "__main__":
