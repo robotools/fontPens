@@ -1,6 +1,6 @@
 # fontPens
 
-A collection of classes implementing the pen protocol for manipulating glyphs.
+A collection of classes implementing the pen protocol for manipulating glyph outlines.
 
 ## Maintainers: how to release
 
