@@ -1,4 +1,5 @@
 import math
+
 from fontTools.pens.pointPen import AbstractPointPen
 
 

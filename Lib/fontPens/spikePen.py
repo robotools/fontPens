@@ -1,6 +1,8 @@
-from fontPens.flattenPen import FlattenPen
+from math import atan2, cos, pi, sin
+
 from fontTools.pens.basePen import BasePen
-from math import atan2, sin, cos, pi
+
+from fontPens.flattenPen import FlattenPen
 
 
 class SpikePen(BasePen):

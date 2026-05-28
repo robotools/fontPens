@@ -1,5 +1,5 @@
+from fontTools.misc.bezierTools import splitCubic, splitLine
 from fontTools.pens.basePen import BasePen
-from fontTools.misc.bezierTools import splitLine, splitCubic
 
 
 class MarginPen(BasePen):
