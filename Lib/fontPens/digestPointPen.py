@@ -14,10 +14,10 @@ class DigestPointPen(AbstractPointPen):
         self.ignoreSmoothAndName = ignoreSmoothAndName
 
     def beginPath(self, identifier=None):
-        self._data.append('beginPath')
+        self._data.append("beginPath")
 
     def endPath(self):
-        self._data.append('endPath')
+        self._data.append("endPath")
 
     def addPoint(self, pt, segmentType=None, smooth=False, name=None, **kwargs):
         if self.ignoreSmoothAndName:
@@ -57,7 +57,6 @@ class DigestPointPen(AbstractPointPen):
 
 
 class DigestPointStructurePen(DigestPointPen):
-
     """
     This calculates a tuple representing the structure and values in a glyph:
 
@@ -99,4 +98,5 @@ def _testDigestPointPen():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

@@ -50,6 +50,7 @@ def thresholdGlyph(aGlyph, threshold=10):
     Convenience function that applies the **ThresholdPen** to a glyph in place.
     """
     from fontTools.pens.recordingPen import RecordingPen
+
     recorder = RecordingPen()
     filterpen = ThresholdPen(recorder, threshold)
     aGlyph.draw(filterpen)
@@ -62,9 +63,11 @@ def thresholdGlyph(aGlyph, threshold=10):
 # = tests =
 # =========
 
+
 def _makeTestGlyph():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 1000
@@ -112,4 +115,5 @@ def _testThresholdGlyph():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

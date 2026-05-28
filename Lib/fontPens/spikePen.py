@@ -4,7 +4,6 @@ from math import atan2, sin, cos, pi
 
 
 class SpikePen(BasePen):
-
     """
     Add narly spikes or dents to the glyph.
     patternFunc is an optional function which recalculates the offset.
@@ -30,13 +29,15 @@ class SpikePen(BasePen):
             if not i % 2:
                 previousPoint = self._points[i - 1]
                 nextPoint = self._points[(i + 1) % pointCount]
-                angle = atan2(previousPoint[0] - nextPoint[0], previousPoint[1] - nextPoint[1])
+                angle = atan2(
+                    previousPoint[0] - nextPoint[0], previousPoint[1] - nextPoint[1]
+                )
                 if self.patternFunc is not None:
                     thisSpikeLength = self.patternFunc(self.spikeLength)
                 else:
                     thisSpikeLength = self.spikeLength
-                x -= sin(angle + .5 * pi) * thisSpikeLength
-                y -= cos(angle + .5 * pi) * thisSpikeLength
+                x -= sin(angle + 0.5 * pi) * thisSpikeLength
+                y -= cos(angle + 0.5 * pi) * thisSpikeLength
 
             if i == 0:
                 self.otherPen.moveTo((x, y))
@@ -56,9 +57,12 @@ class SpikePen(BasePen):
 
 def spikeGlyph(aGlyph, segmentLength=20, spikeLength=40, patternFunc=None):
     from fontTools.pens.recordingPen import RecordingPen
+
     recorder = RecordingPen()
     spikePen = SpikePen(recorder, spikeLength=spikeLength, patternFunc=patternFunc)
-    filterPen = FlattenPen(spikePen, approximateSegmentLength=segmentLength, segmentLines=True)
+    filterPen = FlattenPen(
+        spikePen, approximateSegmentLength=segmentLength, segmentLines=True
+    )
     aGlyph.draw(filterPen)
     aGlyph.clear()
     recorder.replay(aGlyph.getPen())
@@ -69,9 +73,11 @@ def spikeGlyph(aGlyph, segmentLength=20, spikeLength=40, patternFunc=None):
 # = tests =
 # =========
 
+
 def _makeTestGlyphRect():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 500
@@ -86,6 +92,7 @@ def _makeTestGlyphRect():
 
 def _makeTestGlyphLine():
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 500
@@ -167,4 +174,5 @@ def _testSpikeGlyph():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

@@ -89,8 +89,8 @@ def centerAngledMargins(glyph, font):
     pen = AngledMarginPen(font, glyph.width, font.info.italicAngle)
     glyph.draw(pen)
     isLeft, isRight = pen.margin
-    setAngledLeftMargin(glyph, font, (isLeft + isRight) * .5)
-    setAngledRightMargin(glyph, font, (isLeft + isRight) * .5)
+    setAngledLeftMargin(glyph, font, (isLeft + isRight) * 0.5)
+    setAngledRightMargin(glyph, font, (isLeft + isRight) * 0.5)
 
 
 def guessItalicOffset(glyph, font):
@@ -99,16 +99,18 @@ def guessItalicOffset(glyph, font):
     For instance H or I.
     """
     l, r = getAngledMargins(glyph, font)
-    return l - (l + r) * .5
+    return l - (l + r) * 0.5
 
 
 # =========
 # = tests =
 # =========
 
+
 def _makeTestGlyph():
     # make a simple glyph that we can test the pens with.
     from fontParts.fontshell import RGlyph
+
     testGlyph = RGlyph()
     testGlyph.name = "testGlyph"
     testGlyph.width = 1000
@@ -134,4 +136,5 @@ def _testAngledMarginPen():
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
