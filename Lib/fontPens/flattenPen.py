@@ -2,11 +2,11 @@ from fontTools.misc.bezierTools import calcQuadraticArcLength
 from fontTools.pens.basePen import BasePen
 
 from fontPens.penTools import (
-    estimateCubicCurveLength,
     distance,
-    interpolatePoint,
+    estimateCubicCurveLength,
     getCubicPoint,
     getQuadraticPoint,
+    interpolatePoint,
 )
 
 
@@ -287,7 +287,7 @@ def _makeTestGlyphWithCurve():
     return testGlyph
 
 
-def _testFlattenPen():
+def _testFlattenPen2():
     """
     >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyphWithCurve()
@@ -304,7 +304,7 @@ def _testFlattenPen():
     """
 
 
-def _testFlattenGlyph():
+def _testFlattenGlyph2():
     """
     >>> from fontPens.printPen import PrintPen
     >>> glyph = _makeTestGlyphWithCurve()
