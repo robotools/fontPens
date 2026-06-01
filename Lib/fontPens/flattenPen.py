@@ -1,4 +1,4 @@
-from fontTools.misc.bezierTools import calcQuadraticArcLength
+from fontTools.misc.bezierTools import calcQuadraticArcLength, splitCubicAtT, calcCubicArcLength
 from fontTools.pens.basePen import BasePen
 
 from fontPens.penTools import (
@@ -212,6 +212,84 @@ def samplingGlyph(aGlyph, steps=10):
     return aGlyph
 
 
+class SplittedPen(BasePen):
+    """
+    This filter pen processes the contours into a series of curves by splitting the curves
+    at an given segment length.
+
+    - otherPen: a different segment pen object this filter should draw the results with.
+    - approximateSegmentLength: the length you want the flattened segments to be (roughly).
+    """
+
+    def __init__(self, otherPen, approximateSegmentLength=5):
+        self.approximateSegmentLength = approximateSegmentLength
+        super().__init__({})
+        self.otherPen = otherPen
+
+    def _moveTo(self, pt):
+        self.otherPen.moveTo(pt)
+        self.currentPt = pt
+        self.firstPt = pt
+
+    def _lineTo(self, pt):
+        d = distance(self.currentPt, pt)
+        maxSteps = int(round(d / self.approximateSegmentLength))
+        if maxSteps < 1:
+            self.otherPen.lineTo(pt)
+            self.currentPt = pt
+            return
+        step = 1.0 / maxSteps
+        for factor in range(1, maxSteps + 1):
+            self.otherPen.lineTo(interpolatePoint(self.currentPt, pt, factor * step))
+        self.currentPt = pt
+
+    def _curveToOne(self, pt1, pt2, pt3):
+        falseCurve = (pt1 == self.currentPt) and (pt2 == pt3)
+        if falseCurve:
+            self._lineTo(pt3)
+            return
+
+        maxSteps = int(round(calcCubicArcLength(self.currentPt, pt1, pt2, pt3) / self.approximateSegmentLength))
+        if maxSteps < 1:
+            self.otherPen.lineTo(pt3)
+            self.currentPt = pt3
+            return
+
+        tValues = [i / maxSteps for i in range(1, maxSteps)]
+        for curve in splitCubicAtT(self.currentPt, pt1, pt2, pt3, *tValues):
+            self.otherPen.curveTo(*curve[1:])
+
+        self.currentPt = pt3
+
+    def _closePath(self):
+        self.lineTo(self.firstPt)
+        self.otherPen.closePath()
+
+    def _endPath(self):
+        self.otherPen.endPath()
+
+    def addComponent(self, glyphName, transformation):
+        self.otherPen.addComponent(glyphName, transformation)
+
+
+def splittedGlyph(aGlyph, threshold=10):
+    """
+    Convenience function that applies the **SplittedPen** pen to a glyph in place.
+    """
+    if len(aGlyph) == 0:
+        return aGlyph
+    from fontTools.pens.recordingPen import RecordingPen
+
+    recorder = RecordingPen()
+    filterpen = SplittedPen(
+        recorder,
+        approximateSegmentLength=threshold
+    )
+    aGlyph.draw(filterpen)
+    aGlyph.clear()
+    recorder.replay(aGlyph.getPen())
+    return aGlyph
+
 # =========
 # = tests =
 # =========
@@ -300,7 +378,6 @@ def _testFlattenPen2():
     pen.lineTo((84, 300))
     pen.lineTo((84, 37))
     pen.closePath()
-
     """
 
 
@@ -328,7 +405,39 @@ def _testFlattenGlyph2():
     """
 
 
+def _makeTestSplittedGlyphWithCurve():
+    # make a simple glyph that we can test the pens with.
+    from fontParts.fontshell import RGlyph
+
+    testGlyph = RGlyph()
+    testGlyph.name = "testGlyph"
+    testGlyph.width = 500
+    pen = testGlyph.getPen()
+    pen.moveTo((0, 0))
+    pen.curveTo((0, 200), (200, 300), (300, 300))
+    pen.endPath()
+    return testGlyph
+
+
+def _testSplittedGlyph():
+    """
+    >>> from fontPens.printPen import PrintPen
+    >>> glyph = _makeTestSplittedGlyphWithCurve()
+    >>> splittedGlyph(glyph, threshold=100) #doctest: +ELLIPSIS
+    <RGlyph...
+    >>> glyph.draw(PrintPen())
+    pen.moveTo((0, 0))
+    pen.curveTo((0.0, 40.0), (8.000000000000002, 76.0), (21.6, 108.0))
+    pen.curveTo((35.2, 140.0), (54.400000000000006, 168.0), (76.80000000000001, 192.0))
+    pen.curveTo((99.2, 216.0), (124.8, 236.0), (151.2, 252.0))
+    pen.curveTo((177.6, 268.0), (204.8, 280.0), (230.4, 288.0))
+    pen.curveTo((256.0, 296.0), (280.0, 300.0), (300, 300))
+    pen.endPath()
+    """
+
+
 if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
+
