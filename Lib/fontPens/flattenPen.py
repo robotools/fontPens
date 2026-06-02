@@ -1,4 +1,8 @@
-from fontTools.misc.bezierTools import calcQuadraticArcLength, splitCubicAtT, calcCubicArcLength
+from fontTools.misc.bezierTools import (
+    calcQuadraticArcLength,
+    splitCubicAtT,
+    calcCubicArcLength,
+)
 from fontTools.pens.basePen import BasePen
 
 from fontPens.penTools import (
@@ -249,7 +253,12 @@ class SplittedPen(BasePen):
             self._lineTo(pt3)
             return
 
-        maxSteps = int(round(calcCubicArcLength(self.currentPt, pt1, pt2, pt3) / self.approximateSegmentLength))
+        maxSteps = int(
+            round(
+                calcCubicArcLength(self.currentPt, pt1, pt2, pt3)
+                / self.approximateSegmentLength
+            )
+        )
         if maxSteps < 1:
             self.otherPen.lineTo(pt3)
             self.currentPt = pt3
@@ -281,14 +290,12 @@ def splittedGlyph(aGlyph, threshold=10):
     from fontTools.pens.recordingPen import RecordingPen
 
     recorder = RecordingPen()
-    filterpen = SplittedPen(
-        recorder,
-        approximateSegmentLength=threshold
-    )
+    filterpen = SplittedPen(recorder, approximateSegmentLength=threshold)
     aGlyph.draw(filterpen)
     aGlyph.clear()
     recorder.replay(aGlyph.getPen())
     return aGlyph
+
 
 # =========
 # = tests =
@@ -440,4 +447,3 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
-
