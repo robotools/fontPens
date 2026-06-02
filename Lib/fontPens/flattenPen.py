@@ -1,7 +1,7 @@
 from fontTools.misc.bezierTools import (
+    calcCubicArcLength,
     calcQuadraticArcLength,
     splitCubicAtT,
-    calcCubicArcLength,
 )
 from fontTools.pens.basePen import BasePen
 
