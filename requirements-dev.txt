@@ -1,2 +1,2 @@
-pytest==9.0.3
-fontParts>=0.14.2
+pytest==9.1.1
+fontParts>=1.0.0
