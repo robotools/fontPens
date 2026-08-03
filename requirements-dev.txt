@@ -1,2 +1,2 @@
 pytest==9.1.1
-fontParts>=1.0.0
+fontParts>=1.1.1
