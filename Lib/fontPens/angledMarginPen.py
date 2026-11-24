@@ -42,6 +42,7 @@ class AngledMarginPen(BasePen):
         self._start = self.currentPoint = pt
 
     def _lineTo(self, pt):
+        self._getAngled(self.currentPoint)
         self._getAngled(pt)
         self.currentPoint = pt
 
@@ -135,6 +136,49 @@ def _testAngledMarginPen():
     >>> glyph.draw(pen)
     >>> pen.margin
     (117.63269807084649, -1041.061584566772)
+    """
+
+
+def _testAngledMarginPenLineContourStarts():
+    """
+    The margins of a closed contour must not depend on its start point.
+
+    >>> points = [(0, 0), (100, 0), (100, 100)]
+    >>> margins = []
+    >>> for angle in (0, 45):
+    ...     for offset in range(len(points)):
+    ...         contour = points[offset:] + points[:offset]
+    ...         pen = AngledMarginPen({}, width=300, italicAngle=angle)
+    ...         pen.moveTo(contour[0])
+    ...         for point in contour[1:]:
+    ...             pen.lineTo(point)
+    ...         pen.closePath()
+    ...         margins.append(tuple(round(value, 4) for value in pen.margin))
+    >>> margins[:3]
+    [(0.0, 200.0), (0.0, 200.0), (0.0, 200.0)]
+    >>> margins[3:]
+    [(0.0, 100.0), (0.0, 100.0), (0.0, 100.0)]
+    """
+
+
+def _testAngledMarginPenOpenLines():
+    """
+    Isolated points remain unmeasured, while both ends of an open line count.
+
+    >>> pen = AngledMarginPen({}, width=300, italicAngle=0)
+    >>> pen.moveTo((50, 50))
+    >>> pen.endPath()
+    >>> pen.margin is None
+    True
+    >>> margins = []
+    >>> for start, end in [((0, 0), (100, 0)), ((100, 0), (0, 0))]:
+    ...     pen = AngledMarginPen({}, width=300, italicAngle=0)
+    ...     pen.moveTo(start)
+    ...     pen.lineTo(end)
+    ...     pen.endPath()
+    ...     margins.append(pen.margin)
+    >>> margins
+    [(0.0, 200.0), (0.0, 200.0)]
     """
 
 
